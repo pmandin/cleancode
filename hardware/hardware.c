@@ -116,7 +116,7 @@ int main(int argc, char **argv)
 		fprintf(output_handle, "present: 0x%08x\n", cookie_fpu);
 	}
 
-	if (cookie_cpu<60) {
+	if (cookie_cpu<=60) {
 		fprintf(output_handle, " cpu: %lu\n", 68000+cookie_cpu);
 	} else {
 		fprintf(output_handle, " cpu: unknown\n");
