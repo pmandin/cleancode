@@ -1,3 +1,9 @@
+- 0.28:
+	Various: fixes to compile with latest mintlib, and with gcc 2.95.
+	Keyboard: added note in README about running demo programs from a
+		non VT52 terminal.
+	Mouse:	Display key state.
+
 - 0.27:
 	Keyboard:	Fixed key press/release for IKBD program.
 
