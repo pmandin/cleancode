@@ -2,6 +2,6 @@
 
 aclocal -I /usr/local/share/aclocal
 autoheader
-automake --add-missing
+automake --copy --add-missing
 autoconf
 
