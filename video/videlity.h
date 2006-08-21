@@ -23,7 +23,9 @@
 
 /*--- Defines ---*/
 
+#ifndef C_VDLY
 #define C_VDLY 0x56444c59L
+#endif
 
 /*--- Types ---*/
 

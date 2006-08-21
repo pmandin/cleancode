@@ -142,7 +142,9 @@ extern mvdimode_t mvdimodelist[NUM_MVDIMODELIST];
 
 /*--- Functions prototypes ---*/
 
+#ifndef Validmode
 #define Validmode(mode)	\
 	(short)trap_14_ww((short)0x5f,(short)(mode))
+#endif
 
 #endif /* MILANVDI_H */
