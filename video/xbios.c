@@ -227,7 +227,7 @@ void DisplayMonitor(void)
 			BuildModesList = BuildModesListTT;
 			break;
 		case VDO_F30:
-			plugged_monitor = Montype();
+			plugged_monitor = VgetMonitor();
 			BuildModesList = BuildModesListF30;
 			if (cookie_vi2) {
 				BuildModesList = BuildModesListF30VidelInside;
@@ -722,7 +722,7 @@ void BuildModesListF30ScreenBlaster2(void)
 	fprintf(output_handle, "  External clock number: %d\n", header->clock);
 
 	/* Some init to check for suitable monitor */
-	monitor = Montype();
+	monitor = VgetMonitor();
 	mon_suitable = (0x10000000<<monitor)|(header->mon_info[monitor]);
 
 	fprintf(output_handle, " Videomodes:\n");
@@ -820,13 +820,13 @@ void BuildModesListMilan(void)
 
 	/* Get infos about current mode */
 	fprintf(output_handle, " Current video mode:\n");
-	Vsetscreen(-1, &mvdicurmode, MI_MAGIC, CMD_GETMODE);
+	VsetScreen(-1, &mvdicurmode, MI_MAGIC, CMD_GETMODE);
 	fprintf(output_handle, "  Video mode code: 0x%08x\n", mvdicurmode);
 
 	si.size = sizeof(SCREENINFO);
 	si.devID = mvdicurmode;
 	si.scrFlags = 0;
-	Vsetscreen(-1, &si, MI_MAGIC, CMD_GETINFO) ;
+	VsetScreen(-1, &si, MI_MAGIC, CMD_GETINFO) ;
 	if (si.scrFlags & SCRINFO_OK) {
 		fprintf(output_handle, "  %dx%dx%d mode selected\n", si.scrWidth, si.scrHeight, si.scrPlanes);
 	} else {
@@ -851,7 +851,7 @@ void BuildModesListMilan(void)
 	/* Add custom modes */
 	fprintf(output_handle, " Custom video modes:\n");
 	mvdi_nummode=0;
-	Vsetscreen(-1,&enumfunc,MI_MAGIC,CMD_ENUMMODES);
+	VsetScreen(-1,&enumfunc,MI_MAGIC,CMD_ENUMMODES);
 }
 
 void BuildModesListNova(void)
