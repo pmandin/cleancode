@@ -19,6 +19,11 @@ develop these test programs.
 1 Keyboard
 ----------
 
+Note: if you run kbde.tos, kbgd.tos or kbbi.tos from a terminal, you must set
+it to a VT52 compatible type (TERM environment variable set to tw52, vt52 or
+st52, see your termcap file),or most special keys will be prefixed by a ESC (27)
+character, hence quitting the program.
+
 
 1.1 AES
 -------
