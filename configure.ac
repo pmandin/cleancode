@@ -40,7 +40,6 @@ AC_CHECK_LIB(gem, appl_init)
 AC_CONFIG_FILES([
 Makefile
 audio/Makefile
-autotools/Makefile
 bus/Makefile
 cdrom/Makefile
 common/Makefile
