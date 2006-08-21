@@ -249,10 +249,10 @@ void DemoPciLoop(void)
 				fprintf(output_handle, " Normal PCI device:\n");
 
 				for (i=0; i<5; i++) {
-					address = device_config.header0.address[i*4];
-					address |= device_config.header0.address[i*4+1]<<8;
-					address |= device_config.header0.address[i*4+2]<<16;
-					address |= device_config.header0.address[i*4+3]<<24;
+					address = device_config.pci_config_header.header0.address[i*4];
+					address |= device_config.pci_config_header.header0.address[i*4+1]<<8;
+					address |= device_config.pci_config_header.header0.address[i*4+2]<<16;
+					address |= device_config.pci_config_header.header0.address[i*4+3]<<24;
 
 					if (address!=0) {
 						int memtype;
@@ -269,8 +269,8 @@ void DemoPciLoop(void)
 					}
 				}
 
-				subvendor_id = GET_LE_WORD_S(device_config.header0,subvendor_id);
-				subdevice_id = GET_LE_WORD_S(device_config.header0,subdevice_id);
+				subvendor_id = GET_LE_WORD_S(device_config.pci_config_header.header0,subvendor_id);
+				subdevice_id = GET_LE_WORD_S(device_config.pci_config_header.header0,subdevice_id);
 
 				if ((subvendor_id!=0) && (subdevice_id!=0)) {
 					names_read = pci_subdevice_getname(
@@ -294,36 +294,36 @@ void DemoPciLoop(void)
 					}
 				}
 
-				address = GET_LE_LONG_S(device_config.header0,rom_address);
+				address = GET_LE_LONG_S(device_config.pci_config_header.header0,rom_address);
 				if (address!=0) {
 					fprintf(output_handle, "  ROM at 0x%08x\n", address);
 				}
 
 				fprintf(output_handle,
 					"  Interrupt: line=%d, pin=%d, min. grant=%d, max. lat=%d\n",
-					device_config.header0.int_line,
-					device_config.header0.int_pin,
-					device_config.header0.min_gnt,
-					device_config.header0.max_lat
+					device_config.pci_config_header.header0.int_line,
+					device_config.pci_config_header.header0.int_pin,
+					device_config.pci_config_header.header0.min_gnt,
+					device_config.pci_config_header.header0.max_lat
 				);
 				break;
 			case 1:
 				fprintf(output_handle, " PCI-to-PCI bridge device\n");
 				
-				address = GET_LE_LONG_S(device_config.header1, address);
+				address = GET_LE_LONG_S(device_config.pci_config_header.header1, address);
 				if (address!=0) {
 					fprintf(output_handle, "  Memory at 0x%08x\n", address);
 				}
 
 				fprintf(output_handle,
 					"  Bus: primary=%d, secondary=%d, subordinate=%d, sec. latency=%d\n",
-					device_config.header1.primary_bus,
-					device_config.header1.secondary_bus,
-					device_config.header1.subordinate_bus,
-					device_config.header1.sec_latency_timer
+					device_config.pci_config_header.header1.primary_bus,
+					device_config.pci_config_header.header1.secondary_bus,
+					device_config.pci_config_header.header1.subordinate_bus,
+					device_config.pci_config_header.header1.sec_latency_timer
 				);
 
-				address = GET_LE_LONG_S(device_config.header1, rom_address);
+				address = GET_LE_LONG_S(device_config.pci_config_header.header1, rom_address);
 				if (address!=0) {
 					fprintf(output_handle, "  ROM at 0x%08x\n", address);
 				}
@@ -333,14 +333,14 @@ void DemoPciLoop(void)
 
 				fprintf(output_handle,
 					"  Bus: primary=%d, card=%d, subordinate=%d, latency=%d\n",
-					device_config.header2.primary_bus,
-					device_config.header2.card_bus,
-					device_config.header2.subordinate_bus,
-					device_config.header2.latency_timer
+					device_config.pci_config_header.header2.primary_bus,
+					device_config.pci_config_header.header2.card_bus,
+					device_config.pci_config_header.header2.subordinate_bus,
+					device_config.pci_config_header.header2.latency_timer
 				);
 
-				subvendor_id = GET_LE_WORD_S(device_config.header2,subvendor_id);
-				subdevice_id = GET_LE_WORD_S(device_config.header2,subdevice_id);
+				subvendor_id = GET_LE_WORD_S(device_config.pci_config_header.header2,subvendor_id);
+				subdevice_id = GET_LE_WORD_S(device_config.pci_config_header.header2,subdevice_id);
 
 				if ((subvendor_id!=0) && (subdevice_id!=0)) {
 					names_read = pci_subdevice_getname(

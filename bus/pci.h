@@ -337,7 +337,7 @@ typedef struct {
 		pci_config_header0_t header0;
 		pci_config_header1_t header1;
 		pci_config_header2_t header2;
-	};
+	} pci_config_header;
 } pci_config_t;
 
 typedef struct {
