@@ -1,0 +1,115 @@
+- 0.27:
+	Keyboard:	Fixed key press/release for IKBD program.
+
+- 0.26:
+	Various: Put __attribute__((packed)) at the right place.
+	Hardware: Added list of RSVF (HSModem) devices.
+
+- 0.25:
+	Mouse:	Remove useless register use in XBIOS.
+
+- 0.24:
+	Video:	SB3: corrected reading of bpp of current video mode.
+			Librarized all external hardware stuff.
+
+- 0.23:
+	Src:	Forgotten some header files, updated to latest GNU autotools.
+
+- 0.22:
+	Video:	VDI,AES: Check for framebuffer format (packed/bitplanes) not
+			with bpp. Also draws empty rectangles for not available rendering
+			methods.
+
+- 0.21:
+	Bus:	Bugfix in XPCI support.
+
+- 0.20:
+	Video:	More ScreenBlaster 2 infos. Preliminary VSCR and Videlity infos.
+	Bus:	Added preliminary XPCI support.
+
+- 0.19:
+	Video:	Bugfixes. Remove useless endianness conversion.
+			Added preliminary ScreenBlaster 2 infos.
+	Bus:	SCSIDRV library was wrongly implemented for <length> parameter.
+	CD-ROM:	Bugfixes.
+
+- 0.18:
+	CD-ROM:	Bugfixes. Added /dev/cdrom demo program.
+	Bus:	Fixes in inline assembly for gcc 3.
+	Video:	Bugfix in xbios demo program.
+	scsi,pci,xhdi,metados libraries and headers now install
+
+- 0.17:
+	Hardware: Test program added.
+
+- 0.16:
+	Bus:   SCSIdrv: Bugfixes.
+
+- 0.15:
+	Bus:   PCI-Bios: Bugfixes.
+	       SCSIdrv: Preliminary test program.
+	Audio: Xbios: Bugfixes.
+	Video: Xbios: Bugfix for NOVA resolution size, wrong pitch for
+		      modes < 8 bpp.
+
+- 0.14:
+	Audio: Xbios: Bugfixes. Clock calibration also for GSXB drivers.
+	Bus:   PCI-Bios: More bugfixes. Added names search for devices and
+			 classes.
+	Video: Xbios: Modified for Imagine/Nova cookie.
+
+- 0.13:
+	Audio: Xbios: Added Falcon external clock calibration.
+	Bus:   PCI-Bios: More bugfixes.
+
+- 0.12:
+	Bugfix: Syntax error in common/endian.h file.
+	Video: Xbios: Added preliminary NOVA support.
+	Bus:   PCI-Bios: More bugfixes.
+
+- 0.11:
+	Cleanups for licenses and copyrights.
+	Bus:   PCI-Bios: Bugfixes.
+
+- 0.10:
+	Librarized 'output to file' functions.
+	Librarized IKBD interrupt.
+	Audio: Xbios: Added redirection to a file ("-file" parameter).
+		      Check to not display DMA audio infos if only YM2149.
+	Video: Xbios: Bugfix: For Milan MVDI modes, 8 bpp is always packed.
+	Disk:  XHDI:  Test program for XHDI.
+	Bus:   PCI-Bios: Preliminary demo program.
+
+- 0.9:
+	Video: Xbios: Search boot device for Videl Inside file.
+	              Added preliminary BlowUp mode list.
+
+- 0.8:
+	CD-ROM: Metados: Bugfixes.
+	Video: Aes,Vdi: Save/restore palette, even in True Colour modes.
+	Video: Xbios: Bugfixes for MVDI. Added Videl Inside video mode list.
+	              The video mode list is now created sorted.
+
+- 0.7:
+	Updated to gemlib-0.42.2 headers.
+	CD-ROM: Metados: Bugfixes. Redirection to a file ("-file" parameter).
+
+- 0.6:
+	Video: Bugfixes. Added Overscan cookie detection.
+	CD-ROM: Metados: Preliminary demo program.
+
+- 0.5:
+	Video: Bugfixes. Added redirection to a file ("-file" parameter).
+
+- 0.4:
+	Video: Bugfixes. Added infos about some screen enhancers.	
+
+- 0.3:
+	Video: Bugfixes.
+	Audio: Info program added.
+
+- 0.2:
+	Video: demo programs added.
+
+- 0.1:
+	First released version.
