@@ -36,14 +36,14 @@ int main(int argc, char **argv)
 	unsigned long key_pressed;
 	unsigned char scancode;
 
-	unsigned short prev_mousex, prev_mousey, prev_mouseb;
+	unsigned short prev_mousex, prev_mousey, prev_mouseb, prev_kstate;
 	unsigned short Aes_mousex, Aes_mousey, Aes_mouseb, kstate;
 
 	short apid;
 
 	/* Reset variables */
 	Aes_mousex = Aes_mousey = Aes_mouseb = 0;
-	prev_mousex = prev_mousey = prev_mouseb;
+	prev_mousex = prev_mousey = prev_mouseb = prev_kstate=0;
 
 	/* Open AES */
 	apid = appl_init();
@@ -66,6 +66,12 @@ int main(int argc, char **argv)
 		}
 
 		graf_mkstate(&Aes_mousex, &Aes_mousey, &Aes_mouseb, &kstate);
+
+		/* Special keys? */
+		if (prev_kstate!=kstate) {
+			printf("Kstate: 0x%04x\n",kstate);
+			prev_kstate=kstate;
+		}
 
 		/* Mouse motion ? */
 		if ((Aes_mousex!=prev_mousex) || (Aes_mousey!=prev_mousey)) {
