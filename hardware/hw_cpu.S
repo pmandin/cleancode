@@ -63,7 +63,9 @@ _HW_Detect:
 novbr:
 	movel	d1,current_vbr
 
+	movel	d2,sp@-
 	bsr	_HW_CpuDetect
+	movel	sp@+,d2
 	bsr	_HW_FpuDetect
 	bsr	_HW_MmuDetect
 
@@ -126,7 +128,7 @@ _HW_CpuDetect:
 CpuIs040OrHigher:
 	movel	#60,_hw_cpu
 	.chip	68020
-	mulul	d0,d1		| instruction implemented means 040
+	mulul	d0,d2:d1	| instruction implemented means 040
 	.chip	68000
 
 	/*--- Check for 68040 ---*/
