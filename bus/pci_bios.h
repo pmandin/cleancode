@@ -23,7 +23,9 @@
 
 /*--- Defines ---*/
 
+#ifndef C__PCI
 #define C__PCI 0x5f504349L
+#endif
 
 /*--- Functions prototypes ---*/
 
