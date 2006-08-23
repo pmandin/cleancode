@@ -24,6 +24,8 @@
 /*--- Variables ---*/
 
 extern unsigned long hw_cpu, hw_mmu, hw_fpu;
+extern unsigned long hw_mmu_urp, hw_mmu_srp, hw_mmu_tcr;
+extern unsigned long hw_mmu_dttr0, hw_mmu_dttr1, hw_mmu_ittr0, hw_mmu_ittr1;
 
 /*--- Functions prototypes ---*/
 

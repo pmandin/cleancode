@@ -27,6 +27,7 @@
 #include "param.h"
 #include "hw_cpu.h"
 #include "hw_regs.h"
+#include "mmu.h"
 
 /*--- Defines ---*/
 
@@ -282,5 +283,16 @@ void DemoHwLoop(void)
 		}
 
 		curhw++;
+	}
+	fprintf(output_handle, "\n");
+
+	switch(hw_mmu) {
+		case 30:
+			DisplayMmuTree030_851(hw_mmu);
+			break;
+		case 40:
+		case 60:
+			DisplayMmuTree040_060(hw_mmu);
+			break;
 	}
 }

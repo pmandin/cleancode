@@ -28,6 +28,14 @@
 	.globl	_hw_mmu
 	.globl	_hw_fpu
 
+	.globl	_hw_mmu_urp
+	.globl	_hw_mmu_srp
+	.globl	_hw_mmu_tcr
+	.globl	_hw_mmu_dttr0
+	.globl	_hw_mmu_dttr1
+	.globl	_hw_mmu_ittr0
+	.globl	_hw_mmu_ittr1
+
 	.globl	_HW_Detect
 	.globl	_HW_CpuDetect
 	.globl	_HW_FpuDetect
@@ -238,6 +246,14 @@ _HW_MmuDetect:
 
 	clrl	_hw_mmu
 
+	clrl	_hw_mmu_urp
+	clrl	_hw_mmu_srp
+	clrl	_hw_mmu_tcr
+	clrl	_hw_mmu_dttr0
+	clrl	_hw_mmu_dttr1
+	clrl	_hw_mmu_ittr0
+	clrl	_hw_mmu_ittr1
+
 	/* Save stack pointer */
 	movel	sp,a1
 
@@ -254,7 +270,7 @@ _HW_MmuDetect:
 
 	movel	_hw_cpu,d0
 	cmp	#20,d0
-	blts	MmuDetectEnd	/* 68000 or 68010: no mmu */
+	blt	MmuDetectEnd	/* 68000 or 68010: no mmu */
 
 	cmp	#30,d0
 	bles	Mmu030OrLower
@@ -262,7 +278,24 @@ _HW_MmuDetect:
 	/* Check for 040 or 060 */
 	.chip	68040
 	movec	tc,d1
+
+	movec	urp,d1
+	movel	d1,_hw_mmu_urp
+	movec	srp,d1
+	movel	d1,_hw_mmu_srp
+	movec	tc,d1
+	movel	d1,_hw_mmu_tcr
+
+	movec	dtt0,d1
+	movel	d1,_hw_mmu_dttr0
+	movec	dtt1,d1
+	movel	d1,_hw_mmu_dttr1
+	movec	itt0,d1
+	movel	d1,_hw_mmu_ittr0
+	movec	itt1,d1
+	movel	d1,_hw_mmu_ittr1
 	.chip	68000
+
 	bras	MmuIsCpu
 
 	/* Check for 020+68851 or 030 */
@@ -270,6 +303,17 @@ Mmu030OrLower:
 	lea	current_mmusr,a0
 	.chip	68030
 	pmove	psr,a0@
+
+	pmove	crp,_hw_mmu_urp
+	pmove	srp,_hw_mmu_srp
+	pmove	tc,_hw_mmu_tcr
+
+	pmove	tt0,d1
+	movel	d1,_hw_mmu_dttr0
+	movel	d1,_hw_mmu_ittr0
+	pmove	tt1,d1
+	movel	d1,_hw_mmu_dttr1
+	movel	d1,_hw_mmu_ittr1
 	.chip	68000
 
 	cmp	#30,d0
@@ -303,3 +347,10 @@ MmuDetectEnd:
 	.comm	current_vbr,4
 	.comm	current_mmusr,4
 
+	.comm	_hw_mmu_urp,4
+	.comm	_hw_mmu_srp,4
+	.comm	_hw_mmu_tcr,4
+	.comm	_hw_mmu_dttr0,4
+	.comm	_hw_mmu_dttr1,4
+	.comm	_hw_mmu_ittr0,4
+	.comm	_hw_mmu_ittr1,4

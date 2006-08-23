@@ -1,6 +1,6 @@
 bin_PROGRAMS = hw.ttp hwrs.ttp
 
-hw_ttp_SOURCES = hardware.c
+hw_ttp_SOURCES = hardware.c mmu.c
 hw_ttp_LDADD = $(top_builddir)/common/libparam.a \
 	libhw.a
 
@@ -16,4 +16,4 @@ libhw_a_SOURCES = hw_cpu.S hw_regs.S
 rsvfincludedir = $(includedir)
 rsvfinclude_HEADERS = rsvf.h
 
-EXTRA_DIST = hw_cpu.h hw_regs.h
+EXTRA_DIST = hw_cpu.h hw_regs.h mmu.h
