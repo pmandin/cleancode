@@ -1,5 +1,5 @@
 - 0.30:
-	Harware: 68060 incorrectly detected as Unknown.
+	Harware: 68060 incorrectly detected as Unknown. Started MMU dump.
 
 - 0.29:
 	Joystick,joypad: added teamtap support.

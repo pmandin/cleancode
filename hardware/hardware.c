@@ -284,15 +284,21 @@ void DemoHwLoop(void)
 
 		curhw++;
 	}
-	fprintf(output_handle, "\n");
+
+	if (hw_mmu) {
+		fprintf(output_handle, "\nMMU setup:\n");
+	} else {
+		fprintf(output_handle, "\nNo MMU to display\n");
+	}
 
 	switch(hw_mmu) {
 		case 30:
-			DisplayMmuTree030_851(hw_mmu);
+		case 851:
+			DisplayMmuTree030_851();
 			break;
 		case 40:
 		case 60:
-			DisplayMmuTree040_060(hw_mmu);
+			DisplayMmuTree040_060();
 			break;
 	}
 }
