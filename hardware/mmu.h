@@ -23,7 +23,7 @@
 
 /*--- Functions prototypes ---*/
 
-void DisplayMmuTree030_851(int hw_mmu);
-void DisplayMmuTree040_060(int hw_mmu);
+void DisplayMmuTree030_851(void);
+void DisplayMmuTree040_060(void);
 
 #endif /* MMU_H */
