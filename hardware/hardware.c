@@ -219,7 +219,7 @@ void DemoHwLoop(void)
 
 	fprintf(output_handle, "Hardware detection using code:\n");
 
-	if (hw_cpu<60) {
+	if (hw_cpu<=60) {
 		fprintf(output_handle, " cpu: %lu\n", 68000+hw_cpu);
 	} else {
 		fprintf(output_handle, " cpu: unknown\n");
