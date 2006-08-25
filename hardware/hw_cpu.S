@@ -247,7 +247,9 @@ _HW_MmuDetect:
 	clrl	_hw_mmu
 
 	clrl	_hw_mmu_urp
+	clrl	_hw_mmu_urp+4
 	clrl	_hw_mmu_srp
+	clrl	_hw_mmu_srp+4
 	clrl	_hw_mmu_tcr
 	clrl	_hw_mmu_dttr0
 	clrl	_hw_mmu_dttr1
@@ -347,8 +349,8 @@ MmuDetectEnd:
 	.comm	current_vbr,4
 	.comm	current_mmusr,4
 
-	.comm	_hw_mmu_urp,4
-	.comm	_hw_mmu_srp,4
+	.comm	_hw_mmu_urp,8
+	.comm	_hw_mmu_srp,8
 	.comm	_hw_mmu_tcr,4
 	.comm	_hw_mmu_dttr0,4
 	.comm	_hw_mmu_dttr1,4
