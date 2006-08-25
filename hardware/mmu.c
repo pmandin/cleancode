@@ -82,12 +82,12 @@ static void printTc040(void)
 	fprintf(output_handle, "  enable: %s\n", (hw_mmu_tcr & (1<<15)) ? "true" : "false");
 	fprintf(output_handle, "  page size: %d bytes\n", 4096<<((hw_mmu_tcr>>14)&1));
 	fprintf(output_handle, "  no allocate mode (data atc): %s\n", (hw_mmu_tcr & (1<<13)) ? "true" : "false");
-	fprintf(output_handle, "  no allocate mode (instruction atc): %s\n", (hw_mmu_tcr & (1<<12)) ? "true" : "false");
+	fprintf(output_handle, "  no allocate mode (inst atc): %s\n", (hw_mmu_tcr & (1<<12)) ? "true" : "false");
 	fprintf(output_handle, "  half cache mode (data atc): %s\n", (hw_mmu_tcr & (1<<11)) ? "true" : "false");
-	fprintf(output_handle, "  half cache mode (instruction atc): %s\n", (hw_mmu_tcr & (1<<10)) ? "true" : "false");
+	fprintf(output_handle, "  half cache mode (inst atc): %s\n", (hw_mmu_tcr & (1<<10)) ? "true" : "false");
 	fprintf(output_handle, "  default cache mode (data cache): %s\n", defaultCacheMode040[(hw_mmu_tcr>>8)&3]);
 	fprintf(output_handle, "  default upa bits (data cache): %d\n", (hw_mmu_tcr>>6)&3);
 	fprintf(output_handle, "  default write protect (data cache): %s\n", (hw_mmu_tcr & (1<<5)) ? "read only" : "read/write");
-	fprintf(output_handle, "  default cache mode (instruction cache): %s\n", defaultCacheMode040[(hw_mmu_tcr>>3)&3]);
-	fprintf(output_handle, "  default upa bits (instruction cache): %d\n", (hw_mmu_tcr>>1)&3);
+	fprintf(output_handle, "  default cache mode (inst cache): %s\n", defaultCacheMode040[(hw_mmu_tcr>>3)&3]);
+	fprintf(output_handle, "  default upa bits (inst cache): %d\n", (hw_mmu_tcr>>1)&3);
 }
