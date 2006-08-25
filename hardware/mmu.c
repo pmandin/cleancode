@@ -27,6 +27,13 @@
 
 /*--- Constants ---*/
 
+static char *descriptorType030[4]={
+	"invalid",
+	"page descriptor",
+	"next page has 4-bytes descriptors",
+	"next page has 8-bytes descriptor"
+};
+
 static char *defaultCacheMode040[4]={
 	"writethrough, cacheable",
 	"copyback, cacheable",
@@ -44,9 +51,11 @@ static char *ttrCacheMode040[4]={
 /*--- Functions prototypes ---*/
 
 static void printTc030(void);
+static void printRp030(unsigned long rp0, unsigned long rp1);
 static void printTtr030(unsigned long ttr);
 
 static void printTc040(void);
+static void printRp040(unsigned long rp);
 static void printTtr040(unsigned long ttr);
 
 /*--- Functions ---*/
@@ -55,12 +64,22 @@ void DisplayMmuTree030_851(void)
 {
 	fprintf(output_handle, " tc : 0x%08x\n", hw_mmu_tcr);
 		printTc030();
-	fprintf(output_handle, " crp: 0x%08x\n", hw_mmu_urp);
-	fprintf(output_handle, " srp: 0x%08x\n", hw_mmu_srp);
+	fprintf(output_handle, " crp: 0x%08x:0x%08x\n", hw_mmu_urp[0], hw_mmu_urp[1]);
+		printRp030(hw_mmu_urp[0], hw_mmu_urp[1]);
+	fprintf(output_handle, " srp: 0x%08x:0x%08x\n", hw_mmu_srp[0], hw_mmu_srp[1]);
+		printRp030(hw_mmu_srp[0], hw_mmu_srp[1]);
 	fprintf(output_handle, " tt0: 0x%08x\n", hw_mmu_dttr0);
 		printTtr030(hw_mmu_dttr0);
 	fprintf(output_handle, " tt1: 0x%08x\n", hw_mmu_dttr1);
 		printTtr030(hw_mmu_dttr1);
+}
+
+static void printRp030(unsigned long rp0, unsigned long rp1)
+{
+	fprintf(output_handle, "  limit direction: %s\n", (rp0 & (1<<31)) ? "up" : "down");
+	fprintf(output_handle, "  limit: %d\n", (rp0>>16)&0x7fff);
+	fprintf(output_handle, "  dt: %d (%s)\n", rp0 & 3, descriptorType030[rp0 & 3]);
+	fprintf(output_handle, "  base address: 0x%08\n", rp1 & 0xfffffff0UL);
 }
 
 static void printTc030(void)
@@ -93,7 +112,9 @@ void DisplayMmuTree040_060(void)
 	fprintf(output_handle, " tc  : 0x%08x\n", hw_mmu_tcr);
 		printTc040();
 	fprintf(output_handle, " urp : 0x%08x\n", hw_mmu_urp);
+		fprintf(output_handle, "  base address: 0x%08x\n", hw_mmu_urp & 0xfffffe00UL);
 	fprintf(output_handle, " srp : 0x%08x\n", hw_mmu_srp);
+		fprintf(output_handle, "  base address: 0x%08x\n", hw_mmu_srp & 0xfffffe00UL);
 	fprintf(output_handle, " dtt0: 0x%08x\n", hw_mmu_dttr0);
 		printTtr040(hw_mmu_dttr0);
 	fprintf(output_handle, " dtt1: 0x%08x\n", hw_mmu_dttr1);
