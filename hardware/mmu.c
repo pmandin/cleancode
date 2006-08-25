@@ -34,11 +34,20 @@ static char *defaultCacheMode040[4]={
 	"cache inhibited, imprecise exception model"
 };
 
+static char *ttrCacheMode040[4]={
+	"cacheable, writethrough",
+	"cacheable, copyback",
+	"non cacheable, serialized",
+	"non cacheable"
+};
+
 /*--- Functions prototypes ---*/
 
 static void printTc030(void);
+static void printTtr030(unsigned long ttr);
 
 static void printTc040(void);
+static void printTtr040(unsigned long ttr);
 
 /*--- Functions ---*/
 
@@ -49,7 +58,9 @@ void DisplayMmuTree030_851(void)
 	fprintf(output_handle, " crp: 0x%08x\n", hw_mmu_urp);
 	fprintf(output_handle, " srp: 0x%08x\n", hw_mmu_srp);
 	fprintf(output_handle, " tt0: 0x%08x\n", hw_mmu_dttr0);
+		printTtr030(hw_mmu_dttr0);
 	fprintf(output_handle, " tt1: 0x%08x\n", hw_mmu_dttr1);
+		printTtr030(hw_mmu_dttr1);
 }
 
 static void printTc030(void)
@@ -65,6 +76,18 @@ static void printTc030(void)
 	fprintf(output_handle, "  table index d: %d bits\n", hw_mmu_tcr&15);
 }
 
+static void printTtr030(unsigned long ttr)
+{
+	fprintf(output_handle, "  logical address base: 0x%02x000000\n", (ttr>>24)&0xff);
+	fprintf(output_handle, "  logical address mask: 0x00%02x0000\n", (ttr>>16)&0xff);
+	fprintf(output_handle, "  enable: %s\n", (ttr&(1<<15)) ? "true" : "false");
+	fprintf(output_handle, "  cache inhibited: %s\n", (ttr&(1<<10)) ? "true" : "false");
+	fprintf(output_handle, "  read/write: %s\n", (ttr & (1<<9)) ? "true" : "false");
+	fprintf(output_handle, "  read/write mask: %s\n", (ttr & (1<<8)) ? "true" : "false");
+	fprintf(output_handle, "  fc base: %d\n", (ttr>>4)&3);
+	fprintf(output_handle, "  fc mask: %d\n", (ttr>>0)&3);
+}
+
 void DisplayMmuTree040_060(void)
 {
 	fprintf(output_handle, " tc  : 0x%08x\n", hw_mmu_tcr);
@@ -72,9 +95,13 @@ void DisplayMmuTree040_060(void)
 	fprintf(output_handle, " urp : 0x%08x\n", hw_mmu_urp);
 	fprintf(output_handle, " srp : 0x%08x\n", hw_mmu_srp);
 	fprintf(output_handle, " dtt0: 0x%08x\n", hw_mmu_dttr0);
+		printTtr040(hw_mmu_dttr0);
 	fprintf(output_handle, " dtt1: 0x%08x\n", hw_mmu_dttr1);
+		printTtr040(hw_mmu_dttr1);
 	fprintf(output_handle, " itt0: 0x%08x\n", hw_mmu_ittr0);
+		printTtr040(hw_mmu_ittr0);
 	fprintf(output_handle, " itt1: 0x%08x\n", hw_mmu_ittr1);
+		printTtr040(hw_mmu_ittr1);
 }
 
 static void printTc040(void)
@@ -90,4 +117,15 @@ static void printTc040(void)
 	fprintf(output_handle, "  default write protect (data cache): %s\n", (hw_mmu_tcr & (1<<5)) ? "read only" : "read/write");
 	fprintf(output_handle, "  default cache mode (inst cache): %s\n", defaultCacheMode040[(hw_mmu_tcr>>3)&3]);
 	fprintf(output_handle, "  default upa bits (inst cache): %d\n", (hw_mmu_tcr>>1)&3);
+}
+
+static void printTtr040(unsigned long ttr)
+{
+	fprintf(output_handle, "  logical address base: 0x%02x000000\n", (ttr>>24)&0xff);
+	fprintf(output_handle, "  logical address mask: 0x00%02x0000\n", (ttr>>16)&0xff);
+	fprintf(output_handle, "  enable: %s\n", (ttr&(1<<15)) ? "true" : "false");
+	fprintf(output_handle, "  supervisor mode: %d\n", (ttr>>13)&3);
+	fprintf(output_handle, "  upa bits: %d\n", (ttr>>8)&3);
+	fprintf(output_handle, "  cache mode: %s\n", ttrCacheMode040[(ttr>>5)&3]);
+	fprintf(output_handle, "  write protect: %s\n", (ttr & (1<<2)) ? "read only" : "read/write");
 }
