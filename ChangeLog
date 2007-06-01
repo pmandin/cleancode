@@ -1,5 +1,8 @@
+- 0.31:
+	CD-ROM: Display Gemdos device letter for a Metados device.
+
 - 0.30:
-	Harware: 68060 incorrectly detected as Unknown. Started MMU dump.
+	Hardware: 68060 incorrectly detected as Unknown. Started MMU dump.
 
 - 0.29:
 	Joystick,joypad: added teamtap support.

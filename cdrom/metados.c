@@ -83,14 +83,25 @@ void ListMetadosDrives(metainit_t *metainit)
 {
 	metaopen_t metaopen;
 	int handle, i;
+	unsigned char gemdos_dev[32];
 
 	fprintf(output_handle, "List of Metados drives: 0x%08x\n", metainit->drives_map);
+
+	memset(gemdos_dev, 0, sizeof(gemdos_dev));
+	for (i=0; i<32; i++) {
+		int metados_dev = metainit->info->log2phys[i];
+		if ((metados_dev>='A') && (metados_dev<='Z')) {
+			gemdos_dev[metados_dev - 'A'] = i + 'A';
+		}
+	}
+
 	for (i='A'; i<='Z'; i++) {
 		if (metainit->drives_map & (1<<(i-'A'))) {
-			fprintf(output_handle, " Drive %c:", i);
+			fprintf(output_handle, " Metados device %c (Gemdos device %c): ",
+				i, gemdos_dev[i-'A'] ? gemdos_dev[i-'A'] : '-');
 			handle = Metaopen(i, &metaopen); 
 			if (handle==0) {
-				fprintf(output_handle, " %s\n", metaopen.name);
+				fprintf(output_handle, "%s\n", metaopen.name);
 
 				DisplayDiscInfoOld(i);
 				DisplayTocEntriesOld(i);
@@ -101,7 +112,7 @@ void ListMetadosDrives(metainit_t *metainit)
 
 				Metaclose(i);
 			} else {
-				fprintf(output_handle, " Can not open drive\n");
+				fprintf(output_handle, "Can not open drive\n");
 			}
 		}
 	}
