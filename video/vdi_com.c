@@ -605,7 +605,7 @@ unsigned long VDI_AllocateIndirectBuffer(framebuffer_t *framebuffer)
 		screensize = 0;
 	}
 
-	fprintf(stdout, "%ul bytes allocated for indirect rendering\n", screensize);
+	fprintf(output_handle, "%d bytes allocated for indirect rendering\n", screensize);
 	return screensize;
 }
 
