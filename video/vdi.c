@@ -35,7 +35,7 @@
 
 #define SCANCODE_ESC	0x01
 
-#define BORDER 8
+#define BORDER_SIZE 8
 
 /*--- Variables ---*/
 
@@ -111,9 +111,9 @@ void DrawDemo(void)
 	VDI_ClearScreen(&vdifb);
 	
 	/* Calculate size of rectangles */
-	sizex = (vdifb.width/3)-(BORDER<<1);
-	sizey = (vdifb.height/3)-(BORDER<<1);
-	posx = posy = BORDER;
+	sizex = (vdifb.width/3)-(BORDER_SIZE<<1);
+	sizey = (vdifb.height/3)-(BORDER_SIZE<<1);
+	posx = posy = BORDER_SIZE;
 
 	drawrect.w = sizex;
 	drawrect.h = sizey;
@@ -124,32 +124,32 @@ void DrawDemo(void)
 		drawrect.y = posy;
 		RGB_DrawBar(&vdifb, &drawrect, COMPONENT_RED);
 		drawrect.x = posx;
-		drawrect.y = posy+sizey+(BORDER<<1);
+		drawrect.y = posy+sizey+(BORDER_SIZE<<1);
 		RGB_DrawBar(&vdifb, &drawrect, COMPONENT_GREEN);
 		drawrect.x = posx;
-		drawrect.y = posy+((sizey+(BORDER<<1))<<1);
+		drawrect.y = posy+((sizey+(BORDER_SIZE<<1))<<1);
 		RGB_DrawBar(&vdifb, &drawrect, COMPONENT_BLUE);
 	} else {
 		drawrect.x = posx;
 		drawrect.y = posy;
 		VDI_DrawRect(&vdifb, &drawrect, COMPONENT_RED);
 		drawrect.x = posx;
-		drawrect.y = posy+sizey+(BORDER<<1);
+		drawrect.y = posy+sizey+(BORDER_SIZE<<1);
 		VDI_DrawRect(&vdifb, &drawrect, COMPONENT_GREEN);
 		drawrect.x = posx;
-		drawrect.y = posy+((sizey+(BORDER<<1))<<1);
+		drawrect.y = posy+((sizey+(BORDER_SIZE<<1))<<1);
 		VDI_DrawRect(&vdifb, &drawrect, COMPONENT_BLUE);
 	}
 
 	/* Draw R,G,B bars on the middle, using vro_cpyfm() */
-	drawrect.x = posx+sizex+(BORDER<<1);
+	drawrect.x = posx+sizex+(BORDER_SIZE<<1);
 	drawrect.y = posy;
 	RGB_DrawBar(&indirectfb, &drawrect, COMPONENT_RED);
-	drawrect.x = posx+sizex+(BORDER<<1);
-	drawrect.y = posy+sizey+(BORDER<<1);
+	drawrect.x = posx+sizex+(BORDER_SIZE<<1);
+	drawrect.y = posy+sizey+(BORDER_SIZE<<1);
 	RGB_DrawBar(&indirectfb, &drawrect, COMPONENT_GREEN);
-	drawrect.x = posx+sizex+(BORDER<<1);
-	drawrect.y = posy+((sizey+(BORDER<<1))<<1);
+	drawrect.x = posx+sizex+(BORDER_SIZE<<1);
+	drawrect.y = posy+((sizey+(BORDER_SIZE<<1))<<1);
 	RGB_DrawBar(&indirectfb, &drawrect, COMPONENT_BLUE);
 
 	indrect.x = indirectfb.width/3;
@@ -157,26 +157,26 @@ void DrawDemo(void)
 	indrect.w = indirectfb.width/3;
 	indrect.h = indirectfb.height;
 	if (VDI_DrawBars_vrocpyfm(&indirectfb, &indrect) == -1) {
-		drawrect.x = posx+sizex+(BORDER<<1);
+		drawrect.x = posx+sizex+(BORDER_SIZE<<1);
 		drawrect.y = posy;
 		VDI_DrawRect(&vdifb, &drawrect, COMPONENT_RED);
-		drawrect.x = posx+sizex+(BORDER<<1);
-		drawrect.y = posy+sizey+(BORDER<<1);
+		drawrect.x = posx+sizex+(BORDER_SIZE<<1);
+		drawrect.y = posy+sizey+(BORDER_SIZE<<1);
 		VDI_DrawRect(&vdifb, &drawrect, COMPONENT_GREEN);
-		drawrect.x = posx+sizex+(BORDER<<1);
-		drawrect.y = posy+((sizey+(BORDER<<1))<<1);
+		drawrect.x = posx+sizex+(BORDER_SIZE<<1);
+		drawrect.y = posy+((sizey+(BORDER_SIZE<<1))<<1);
 		VDI_DrawRect(&vdifb, &drawrect, COMPONENT_BLUE);
 	}
 
 	/* Draw R,G,B bars on the right, using VDI */
-	drawrect.x = posx+((sizex+(BORDER<<1))<<1);
+	drawrect.x = posx+((sizex+(BORDER_SIZE<<1))<<1);
 	drawrect.y = posy;
 	VDI_DrawBars_vbar(&vdifb, &drawrect, COMPONENT_RED);
-	drawrect.x = posx+((sizex+(BORDER<<1))<<1);
-	drawrect.y = posy+sizey+(BORDER<<1);
+	drawrect.x = posx+((sizex+(BORDER_SIZE<<1))<<1);
+	drawrect.y = posy+sizey+(BORDER_SIZE<<1);
 	VDI_DrawBars_vbar(&vdifb, &drawrect, COMPONENT_GREEN);
-	drawrect.x = posx+((sizex+(BORDER<<1))<<1);
-	drawrect.y = posy+((sizey+(BORDER<<1))<<1);
+	drawrect.x = posx+((sizex+(BORDER_SIZE<<1))<<1);
+	drawrect.y = posy+((sizey+(BORDER_SIZE<<1))<<1);
 	VDI_DrawBars_vbar(&vdifb, &drawrect, COMPONENT_BLUE);
 
 	/* Show mouse cursor */
