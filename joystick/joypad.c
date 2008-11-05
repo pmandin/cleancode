@@ -104,6 +104,8 @@ char *raw_names[8]={
 	"direction, line 3 (#, 9, 6, 3)",
 };
 
+const int global_joypad_mask=0xabffff;
+
 /*--- Functions prototypes ---*/
 
 void DisplayLogicalValues(void);
@@ -232,6 +234,8 @@ void DisplayLogicalValues(void)
 
 	/* Joypads (8 joypads, 2 axis, 17 buttons) */ 
 	for (i=0;i<8;i++) {
+		jp_joypads[i] &= global_joypad_mask;
+	
 		if (jp_joypads[i] != prev_jp_joypads[i]) {
 			printf("Joypad %d: ",i);
 
