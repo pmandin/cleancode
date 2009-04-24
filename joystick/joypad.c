@@ -160,6 +160,7 @@ int main(int argc, char **argv)
 	Supexec(UpdateJoypads);
 
 	while (scancode != SCANCODE_ESC) {
+		Vsync();
 
 		/* Read key pressed, if needed */
 		if (Cconis()) {
