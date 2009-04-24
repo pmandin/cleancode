@@ -1,6 +1,7 @@
 - 0.31:
 	CD-ROM: Display Gemdos device letter for a Metados device.
 	Vdi: BORDER was already used in VDI header files.
+	Joypad: Add teamtap autodetection routine.
 
 - 0.30:
 	Hardware: 68060 incorrectly detected as Unknown. Started MMU dump.
