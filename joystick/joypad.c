@@ -65,6 +65,90 @@ static const unsigned short joypad_masks[8*4]={
 	0xff9f, 0xffaf, 0xffcf, 0xffff
 };
 
+/* Teamtap detection values */
+static const unsigned long teamtap_detect[20][4]={
+	{1<<JP_UP,
+		(1<<JP_UP)|(1<<JP_KP0),
+		(1<<JP_UP)|(1<<JP_KPNUM)|(1<<JP_KP0),
+		(1<<JP_KPMULT)|(1<<JP_KP0)},
+	{1<<JP_DOWN,
+		(1<<JP_DOWN)|(1<<JP_KP8),
+		(1<<JP_DOWN)|(1<<JP_KP9)|(1<<JP_KP8),
+		(1<<JP_KP7)|(1<<JP_KP8)},
+	{1<<JP_LEFT,
+		(1<<JP_LEFT)|(1<<JP_KP5),
+		(1<<JP_LEFT)|(1<<JP_KP6)|(1<<JP_KP5),
+		(1<<JP_KP4)|(1<<JP_KP5)},
+	{1<<JP_RIGHT,
+		(1<<JP_RIGHT)|(1<<JP_KP2),
+		(1<<JP_RIGHT)|(1<<JP_KP3)|(1<<JP_KP2),
+		(1<<JP_KP1)|(1<<JP_KP2)},
+	{1<<JP_OPTION,
+		(1<<JP_OPTION)|(1<<JP_FIRE1)|(1<<JP_FIRE2),
+		(1<<JP_FIRE0)|(1<<JP_FIRE1)|(1<<JP_FIRE2),
+		0},
+	{1<<JP_FIRE0,
+		(1<<JP_FIRE2)|(1<<JP_FIRE0),
+		(1<<JP_FIRE0)|(1<<JP_OPTION)|(1<<JP_FIRE2),
+		(1<<JP_FIRE1)|(1<<JP_FIRE2)},
+	{1<<JP_FIRE1,
+		(1<<JP_FIRE0),
+		(1<<JP_OPTION)|(1<<JP_FIRE0)|(1<<JP_FIRE1),
+		(1<<JP_FIRE0)|(1<<JP_FIRE2)},
+	{1<<JP_FIRE2,
+		(1<<JP_OPTION)|(1<<JP_FIRE0)|(1<<JP_FIRE1)|(1<<JP_FIRE2),
+		(1<<JP_OPTION),
+		(1<<JP_FIRE0)|(1<<JP_FIRE1)},
+	{1<<JP_KP1,
+		(1<<JP_RIGHT)|(1<<JP_KP1),
+		(1<<JP_RIGHT)|(1<<JP_KP1)|(1<<JP_KP3),
+		(1<<JP_RIGHT)|(1<<JP_KP2)},
+	{1<<JP_KP2,
+		(1<<JP_RIGHT)|(1<<JP_KP1)|(1<<JP_KP2)|(1<<JP_KP3),
+		(1<<JP_KP3),
+		(1<<JP_RIGHT)|(1<<JP_KP1)},
+	{1<<JP_KP3,
+		(1<<JP_RIGHT)|(1<<JP_KP1)|(1<<JP_KP2)|(1<<JP_KP3),
+		(1<<JP_RIGHT)|(1<<JP_KP1)|(1<<JP_KP2),
+		0},
+	{1<<JP_KP4,
+		(1<<JP_LEFT)|(1<<JP_KP4),
+		(1<<JP_LEFT)|(1<<JP_KP4)|(1<<JP_KP6),
+		(1<<JP_LEFT)|(1<<JP_KP5)},
+	{1<<JP_KP5,
+		(1<<JP_LEFT)|(1<<JP_KP4)|(1<<JP_KP5)|(1<<JP_KP6),
+		(1<<JP_KP6),
+		(1<<JP_LEFT)|(1<<JP_KP4)},
+	{1<<JP_KP6,
+		(1<<JP_LEFT)|(1<<JP_KP4)|(1<<JP_KP5)|(1<<JP_KP6),
+		(1<<JP_LEFT)|(1<<JP_KP4)|(1<<JP_KP5),
+		0},
+	{1<<JP_KP7,
+		(1<<JP_DOWN)|(1<<JP_KP7),
+		(1<<JP_DOWN)|(1<<JP_KP7)|(1<<JP_KP9),
+		(1<<JP_DOWN)|(1<<JP_KP8)},
+	{1<<JP_KP8,
+		(1<<JP_DOWN)|(1<<JP_KP7)|(1<<JP_KP8)|(1<<JP_KP9),
+		(1<<JP_KP9),
+		(1<<JP_DOWN)|(1<<JP_KP7)},
+	{1<<JP_KP9,
+		(1<<JP_DOWN)|(1<<JP_KP7)|(1<<JP_KP8)|(1<<JP_KP9),
+		(1<<JP_DOWN)|(1<<JP_KP7)|(1<<JP_KP8),
+		0},
+	{1<<JP_KPMULT,
+		(1<<JP_UP)|(1<<JP_KPMULT),
+		(1<<JP_UP)|(1<<JP_KPNUM),
+		(1<<JP_UP)|(1<<JP_KP0)},
+	{1<<JP_KP0,
+		(1<<JP_UP)|(1<<JP_KPNUM)|(1<<JP_KPMULT)|(1<<JP_KP0),
+		1<<JP_KPNUM,
+		(1<<JP_UP)|(1<<JP_KPMULT)},
+	{1<<JP_KPNUM,
+		(1<<JP_UP)|(1<<JP_KPNUM)|(1<<JP_KPMULT)|(1<<JP_KP0),
+		(1<<JP_UP)|(1<<JP_KPMULT)|(1<<JP_KP0),
+		0},
+};
+
 /*--- Defines ---*/
 
 enum {	/*  _MCH cookie */
@@ -76,6 +160,10 @@ enum {	/*  _MCH cookie */
 };
 
 #define SCANCODE_ESC	0x01
+
+#define TEAMTAP_MAYBE 0
+#define TEAMTAP_YES 1
+#define TEAMTAP_NO 2
 
 /*--- Variables ---*/
 
@@ -105,6 +193,8 @@ char *raw_names[8]={
 };
 
 const int global_joypad_mask=0xabffff;
+
+int has_teamtap[2]={TEAMTAP_MAYBE,TEAMTAP_MAYBE};
 
 /*--- Functions prototypes ---*/
 
@@ -175,10 +265,38 @@ int main(int argc, char **argv)
 	}
 }
 
+/* Detect Teamtap */
+void detect_teamtap(int num_port)
+{
+	int i,j;
+
+	for (i=0; i<20; i++) {
+		int with_teamtap=1;
+
+		if (jp_joypads[num_port*4]!=teamtap_detect[i][0])
+			continue;
+
+		/* If any button on first joypad pressed, check other pads */
+		for (j=1; j<4; j++) {
+			if ((jp_joypads[num_port*4+j] & teamtap_detect[i][j])
+				==teamtap_detect[i][j])
+			{
+				with_teamtap = 0;
+			}	
+		}
+
+		has_teamtap[num_port] =
+			(with_teamtap ? TEAMTAP_YES : TEAMTAP_NO);
+		printf("Port %d has teamtap: %s\n",
+			num_port, with_teamtap ? "true" : "false");
+		break;
+	}
+}
+
 /* Interpret values */
 void DisplayLogicalValues(void)
 {
-	int i;
+	int i,j;
 
 	/* Joysticks (4 joysticks, 2 axis, 1 button) */
 	if ((jp_fires != prev_jp_fires) || (jp_directions != prev_jp_directions)) {
@@ -234,83 +352,99 @@ void DisplayLogicalValues(void)
 	}
 
 	/* Joypads (8 joypads, 2 axis, 17 buttons) */ 
-	for (i=0;i<8;i++) {
+	for (i=0; i<8; i++) {
 		jp_joypads[i] &= global_joypad_mask;
-	
-		if (jp_joypads[i] != prev_jp_joypads[i]) {
-			printf("Joypad %d: ",i);
+	}
 
-			if (jp_joypads[i] & (1<<JP_UP)) {
-				printf("up ");
-			}
-			if (jp_joypads[i] & (1<<JP_DOWN)) {
-				printf("down ");
-			}
-			if (jp_joypads[i] & (1<<JP_LEFT)) {
-				printf("left ");
-			}
-			if (jp_joypads[i] & (1<<JP_RIGHT)) {
-				printf("right ");
-			}
+	/* Detect teamtaps if needed */
+	for (i=0; i<2; i++) {
+		if (has_teamtap[i]==TEAMTAP_MAYBE) {
+			detect_teamtap(i);
+		}
+	}
 
-			if (jp_joypads[i] & (1<<JP_PAUSE)) {
-				printf("pause ");
-			}
-			if (jp_joypads[i] & (1<<JP_OPTION)) {
-				printf("option ");
-			}
+	for (j=0; j<2; j++) {
+		int num_pads = 4;
+		if (has_teamtap[j] == TEAMTAP_NO) {
+			num_pads = 1;
+		}
 
-			if (jp_joypads[i] & (1<<JP_FIRE0)) {
-				printf("a ");
-			}
-			if (jp_joypads[i] & (1<<JP_FIRE1)) {
-				printf("b ");
-			}
-			if (jp_joypads[i] & (1<<JP_FIRE2)) {
-				printf("c ");
-			}
+		for (i=j*4; i<j*4+num_pads; i++) {
+			if (jp_joypads[i] != prev_jp_joypads[i]) {
+				printf("Joypad %d: ",i);
 
-			if (jp_joypads[i] & (1<<JP_KPNUM)) {
-				printf("# ");
-			}
-			if (jp_joypads[i] & (1<<JP_KPMULT)) {
-				printf("* ");
-			}
+				if (jp_joypads[i] & (1<<JP_UP)) {
+					printf("up ");
+				}
+				if (jp_joypads[i] & (1<<JP_DOWN)) {
+					printf("down ");
+				}
+				if (jp_joypads[i] & (1<<JP_LEFT)) {
+					printf("left ");
+				}
+				if (jp_joypads[i] & (1<<JP_RIGHT)) {
+					printf("right ");
+				}
 
-			if (jp_joypads[i] & (1<<JP_KP0)) {
-				printf("0 ");
-			}
-			if (jp_joypads[i] & (1<<JP_KP1)) {
-				printf("1 ");
-			}
-			if (jp_joypads[i] & (1<<JP_KP2)) {
-				printf("2 ");
-			}
-			if (jp_joypads[i] & (1<<JP_KP3)) {
-				printf("3 ");
-			}
-			if (jp_joypads[i] & (1<<JP_KP4)) {
-				printf("4 ");
-			}
-			if (jp_joypads[i] & (1<<JP_KP5)) {
-				printf("5 ");
-			}
-			if (jp_joypads[i] & (1<<JP_KP6)) {
-				printf("6 ");
-			}
-			if (jp_joypads[i] & (1<<JP_KP7)) {
-				printf("7 ");
-			}
-			if (jp_joypads[i] & (1<<JP_KP8)) {
-				printf("8 ");
-			}
-			if (jp_joypads[i] & (1<<JP_KP9)) {
-				printf("9 ");
-			}
+				if (jp_joypads[i] & (1<<JP_PAUSE)) {
+					printf("pause ");
+				}
+				if (jp_joypads[i] & (1<<JP_OPTION)) {
+					printf("option ");
+				}
 
-			printf("\n");
+				if (jp_joypads[i] & (1<<JP_FIRE0)) {
+					printf("a ");
+				}
+				if (jp_joypads[i] & (1<<JP_FIRE1)) {
+					printf("b ");
+				}
+				if (jp_joypads[i] & (1<<JP_FIRE2)) {
+					printf("c ");
+				}
 
-			prev_jp_joypads[i] = jp_joypads[i];
+				if (jp_joypads[i] & (1<<JP_KPNUM)) {
+					printf("# ");
+				}
+				if (jp_joypads[i] & (1<<JP_KPMULT)) {
+					printf("* ");
+				}
+
+				if (jp_joypads[i] & (1<<JP_KP0)) {
+					printf("0 ");
+				}
+				if (jp_joypads[i] & (1<<JP_KP1)) {
+					printf("1 ");
+				}
+				if (jp_joypads[i] & (1<<JP_KP2)) {
+					printf("2 ");
+				}
+				if (jp_joypads[i] & (1<<JP_KP3)) {
+					printf("3 ");
+				}
+				if (jp_joypads[i] & (1<<JP_KP4)) {
+					printf("4 ");
+				}
+				if (jp_joypads[i] & (1<<JP_KP5)) {
+					printf("5 ");
+				}
+				if (jp_joypads[i] & (1<<JP_KP6)) {
+					printf("6 ");
+				}
+				if (jp_joypads[i] & (1<<JP_KP7)) {
+					printf("7 ");
+				}
+				if (jp_joypads[i] & (1<<JP_KP8)) {
+					printf("8 ");
+				}
+				if (jp_joypads[i] & (1<<JP_KP9)) {
+					printf("9 ");
+				}
+
+				printf("\n");
+
+				prev_jp_joypads[i] = jp_joypads[i];
+			}
 		}
 	}
 }
