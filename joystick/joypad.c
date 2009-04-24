@@ -270,6 +270,19 @@ void detect_teamtap(int num_port)
 {
 	int i,j;
 
+	/* Check if joypad 1,2,3 triggered but not 0 */
+	for (i=1; i<4; i++) {
+		if (jp_joypads[num_port*4+i] && (jp_joypads[num_port*4]==0)) {
+			has_teamtap[num_port] = TEAMTAP_YES;
+
+			printf("Port %d has teamtap: true\n");
+			return;
+		}
+	}
+
+	/* Check if joypad 0 on a given port triggered ghost events for
+	 * other joypads
+	 */
 	for (i=0; i<20; i++) {
 		int with_teamtap=1;
 
