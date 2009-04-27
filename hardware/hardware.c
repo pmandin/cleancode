@@ -81,6 +81,13 @@ hardware_t hardware[]={
 	HW_INIT(NULL, NULL)
 };
 
+hardware_t hardware_ct60[]={
+	HW_INIT(0x30000000, "CT60: Supervidel"),
+	HW_INIT(0x80000000, "CT60: Ethernat"),
+	HW_INIT(0xe0000000, "CT60: CTPCI"),
+	HW_INIT(NULL, NULL)
+};
+
 /*--- Functions prototypes ---*/
 
 void DemoLoop(void);
@@ -200,6 +207,7 @@ void DemoHwLoop(void)
 	unsigned char *fpu_type;
 	void *oldpile;
 	hardware_t *curhw;
+	unsigned long cookie_ct60;
 
 	/* Do hardware detection */
 	oldpile=(void *)Super(NULL);
@@ -283,6 +291,20 @@ void DemoHwLoop(void)
 		}
 
 		curhw++;
+	}
+
+	if (Getcookie(C_CT60, &cookie_ct60) == C_FOUND) {
+		curhw=hardware_ct60;
+		while (curhw->address != NULL) {
+			if (curhw->present) {
+				fprintf(output_handle, " 0x%08x: %s\n",
+					curhw->address,
+					curhw->name
+				);
+			}
+
+			curhw++;
+		}
 	}
 
 	if (hw_mmu) {
