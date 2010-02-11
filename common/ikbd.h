@@ -31,11 +31,11 @@
 
 /* Variables */
 
-extern unsigned char	Ikbd_keyboard[128];	/* Keyboard table */
-extern unsigned short	Ikbd_mouseb;		/* Mouse on port 0, buttons */
-extern short 			Ikbd_mousex;		/* Mouse X relative motion */
-extern short 			Ikbd_mousey;		/* Mouse Y relative motion */
-extern unsigned short	Ikbd_joystick;		/* Joystick on port 1 */
+extern volatile unsigned char	Ikbd_keyboard[128];	/* Keyboard table */
+extern volatile unsigned short	Ikbd_mouseb;		/* Mouse on port 0, buttons */
+extern volatile short 			Ikbd_mousex;		/* Mouse X relative motion */
+extern volatile short 			Ikbd_mousey;		/* Mouse Y relative motion */
+extern volatile unsigned short	Ikbd_joystick;		/* Joystick on port 1 */
 				
 /* Functions */ 
 extern void IkbdInstall(void);
