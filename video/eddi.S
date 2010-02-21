@@ -27,8 +27,12 @@
 _get_EdDI_version:
 	movel	sp@(4),a0	/* Value of EdDI cookie */
 
+	movel	d2,sp@-
+
 	/* Call EdDI function #0 */
 	clrw	d0
 	jsr	(a0)
+
+	movel	sp@+,d2
 
 	rts
