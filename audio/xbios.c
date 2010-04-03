@@ -144,9 +144,9 @@ int main(int argc, char **argv)
 	}
 	if (cookie_snd & SND_PSG) fprintf(output_handle, " YM2149 soundchip\n");
 	if (cookie_snd & SND_8BIT) fprintf(output_handle, " 8 bits DMA\n");
-	if (cookie_snd & SND_16BIT) fprintf(output_handle, " Xbios functions\n");
+	if (cookie_snd & SND_DMAREC) fprintf(output_handle, " Xbios functions\n");
 	if (cookie_snd & SND_DSP) fprintf(output_handle, " DSP 56k\n");
-	if (cookie_snd & SND_MATRIX) fprintf(output_handle, " 16 bits CODEC, connection matrix\n");
+	if (cookie_snd & SND_16BIT) fprintf(output_handle, " 16 bits CODEC, connection matrix\n");
 	if (cookie_snd & SND_GSXB) fprintf(output_handle, " GSXB audio\n");
 
 	/*--- Sound Treiber Für Atari ---*/

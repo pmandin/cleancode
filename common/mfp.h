@@ -21,6 +21,7 @@
 #ifndef _MFP_H
 #define _MFP_H
 
+#ifndef MFP_PARALLEL
 enum {
 	MFP_PARALLEL=0,
 	MFP_DCD,
@@ -43,13 +44,16 @@ enum {
 	MFP_RING,
 	MFP_MONODETECT
 };
+#endif
 
 /* Xbtimer() timers */
+#ifndef XB_TIMERA
 enum {
 	XB_TIMERA=0,
 	XB_TIMERB,
 	XB_TIMERC,
 	XB_TIMERD
 };
+#endif
 
 #endif /* _MFP_H */

@@ -54,8 +54,10 @@ enum {
 /* EgetShift() masks */
 #define ES_BANK		0x000f
 #define ES_MODE		0x0700
+#ifndef ES_GRAY
 #define ES_GRAY		0x1000
 #define ES_SMEAR	0x8000
+#endif
 
 /* ST/TT shifter modes */
 #define ST_LOW	0x0000
