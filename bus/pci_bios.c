@@ -42,6 +42,9 @@
 		Super(stack); \
 	}
 
+#define PCIBIOS_CLOBBER_LIST	\
+	"d1", "d2", "a0", "a1", "a2", "memory"
+
 /*--- PCI bios function calls ---*/
 
 #define PCIBIOSCALL_l_d0ld1w(func_ptr,p1,p2)	\
@@ -55,7 +58,7 @@ __extension__	\
 		"jbsr	%1@"	\
 		: "=r"(retvalue)	\
 		: "a"(func_ptr), "g"(p1), "g"(p2)	\
-		: "d1", "memory"	\
+		: PCIBIOS_CLOBBER_LIST	\
 	);	\
 	retvalue;	\
 })
@@ -72,7 +75,7 @@ __extension__	\
 		"jbsr	%1@"	\
 		: "=r"(retvalue)	\
 		: "a"(func_ptr), "g"(p1), "g"(p2), "g"(p3)	\
-		: "d1", "a0", "memory"	\
+		: PCIBIOS_CLOBBER_LIST	\
 	);	\
 	retvalue;	\
 })
@@ -88,7 +91,7 @@ __extension__	\
 		"jbsr	%1@"	\
 		: "=r"(retvalue)	\
 		: "a"(func_ptr), "g"(p1), "g"(p2)	\
-		: "d1", "memory"	\
+		: PCIBIOS_CLOBBER_LIST	\
 	);	\
 	retvalue;	\
 })
@@ -105,7 +108,7 @@ __extension__	\
 		"jbsr	%1@"	\
 		: "=r"(retvalue)	\
 		: "a"(func_ptr), "g"(p1), "g"(p2), "g"(p3)	\
-		: "d1", "d2", "memory"	\
+		: PCIBIOS_CLOBBER_LIST	\
 	);	\
 	retvalue;	\
 })
@@ -122,7 +125,7 @@ __extension__	\
 		"jbsr	%1@"	\
 		: "=r"(retvalue)	\
 		: "a"(func_ptr), "g"(p1), "g"(p2), "g"(p3)	\
-		: "d1", "a0", "memory"	\
+		: PCIBIOS_CLOBBER_LIST	\
 	);	\
 	retvalue;	\
 })
@@ -137,7 +140,7 @@ __extension__	\
 		"jbsr	%1@"	\
 		: "=r"(retvalue)	\
 		: "a"(func_ptr), "g"(p1)	\
-		: "memory"	\
+		: PCIBIOS_CLOBBER_LIST	\
 	);	\
 	retvalue;	\
 })
@@ -153,7 +156,7 @@ __extension__	\
 		"jbsr	%1@"	\
 		: "=r"(retvalue)	\
 		: "a"(func_ptr), "g"(p1), "g"(p2)	\
-		: "d1", "memory"	\
+		: PCIBIOS_CLOBBER_LIST	\
 	);	\
 	retvalue;	\
 })
@@ -169,7 +172,7 @@ __extension__	\
 		"jbsr	%1@"	\
 		: "=r"(retvalue)	\
 		: "a"(func_ptr), "g"(p1), "g"(p2)	\
-		: "a0", "memory"	\
+		: PCIBIOS_CLOBBER_LIST	\
 	);	\
 	retvalue;	\
 })
@@ -185,7 +188,7 @@ __extension__	\
 		"jbsr	%1@"	\
 		: "=r"(retvalue)\
 		: "a"(func_ptr), "g"(p1), "g"(p2)\
-		: "d1", "memory"	\
+		: PCIBIOS_CLOBBER_LIST	\
 	);	\
 	retvalue;	\
 })
@@ -202,7 +205,7 @@ __extension__	\
 		"jbsr	%1@"	\
 		: "=r"(retvalue)	\
 		: "a"(func_ptr), "g"(p1), "g"(p2), "g"(p3)	\
-		: "d1", "d2", "memory"	\
+		: PCIBIOS_CLOBBER_LIST	\
 	);	\
 	retvalue;	\
 })
@@ -216,7 +219,7 @@ __extension__	\
 		"jbsr	%1@"	\
 		: "=r"(retvalue)	\
 		: "a"(func_ptr)	\
-		: "memory"	\
+		: PCIBIOS_CLOBBER_LIST	\
 	);	\
 	retvalue;	\
 })
