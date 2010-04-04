@@ -79,4 +79,3 @@ RegDetectEnd:
 	.even
 	.comm	save_vector0,4	| Bus error instruction
 	.comm	current_vbr,4
-
