@@ -2,6 +2,7 @@
 	CD-ROM: Display Gemdos device letter for a Metados device.
 	Vdi: BORDER was already used in VDI header files.
 	Joypad: Add teamtap autodetection routine.
+	PCI: PCI functions from _PCI cookie use PureC API.
 
 - 0.30:
 	Hardware: 68060 incorrectly detected as Unknown. Started MMU dump.
