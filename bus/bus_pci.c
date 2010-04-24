@@ -54,6 +54,8 @@ char progifname[64];
 void DemoPciLoop(void);
 void DemoLoop(void);
 
+int print_bar(long device_handle, int num_bar, unsigned long *bar_list);
+
 /*--- Functions ---*/
 
 int main(int argc, char **argv)
@@ -101,7 +103,7 @@ void DemoPciLoop(void)
 	char **pci_subclass_devices;
 	unsigned short vendor_id, device_id, command, status;
 	unsigned short subvendor_id, subdevice_id;
-	unsigned long address, size;
+	unsigned long address;
 
 	/* Init library */
 	if (pci_init()!=PCI_SUCCESSFUL) {
@@ -160,14 +162,16 @@ void DemoPciLoop(void)
 		fprintf(output_handle, " Configuration registers:\n");
 		for (y=0; y<4; y++) {
 			fprintf(output_handle, "  %02x:", y*16);
-			for (x=0; x<16; x++) {
-				unsigned char value;
+			for (x=0; x<4; x++) {
+				unsigned long value;
 
-				result=pci_read_config_byte(device_handle, &value, y*16+x);
+				result=pci_read_config_long(device_handle, &value, (y<<4)+(x<<2));
 				if (result<0) {
-					fprintf(output_handle, " --");
+					fprintf(output_handle, " -- -- -- --");
 				} else {
-					fprintf(output_handle, " %02x", value);
+					fprintf(output_handle, " %02x %02x %02x %02x",
+						value & 0xff, (value>>8) & 0xff,
+						(value>>16) & 0xff, (value>>24) & 0xff);
 				}
 			}
 			fprintf(output_handle, "\n");
@@ -229,44 +233,14 @@ void DemoPciLoop(void)
 		fprintf(output_handle, " Header type: 0x%02x\n",device_config.header_type);
 		fprintf(output_handle, " ARE: 0x%02x\n",device_config.are);
 
-		address = GET_LE_LONG_S(device_config,address);
-		if (address!=0) {
-			int memtype;
-
-			address = pci_read_mem_base(address, &memtype);
-			size = pci_read_mem_size(device_handle, 0x10);
-
-			if (memtype) {
-				fprintf(output_handle, " Memory space: ");
-			} else {
-				fprintf(output_handle, " I/O space: ");
-			}
-			fprintf(output_handle, "at 0x%08x, size 0x%08x\n", address, size);
-		}
-
 		switch(device_config.header_type) {
 			case 0:
 				fprintf(output_handle, " Normal PCI device:\n");
 
-				for (i=0; i<5; i++) {
-					address = device_config.pci_config_header.header0.address[i*4];
-					address |= device_config.pci_config_header.header0.address[i*4+1]<<8;
-					address |= device_config.pci_config_header.header0.address[i*4+2]<<16;
-					address |= device_config.pci_config_header.header0.address[i*4+3]<<24;
-
-					if (address!=0) {
-						int memtype;
-
-						address = pci_read_mem_base(address, &memtype);
-						size = pci_read_mem_size(device_handle, 0x10);
-						fprintf(output_handle, "  Region %d:", i);
-						if (memtype) {
-							fprintf(output_handle, " Memory space: ");
-						} else {
-							fprintf(output_handle, " I/O space: ");
-						}
-						fprintf(output_handle, "at 0x%08x, size 0x%08x\n", address, size);
-					}
+				i = 0;
+				while (i<6) {
+					i += print_bar(device_handle, i,
+						(unsigned long *) &device_config.pci_config_header.header0.bar[0]);
 				}
 
 				subvendor_id = GET_LE_WORD_S(device_config.pci_config_header.header0,subvendor_id);
@@ -296,7 +270,7 @@ void DemoPciLoop(void)
 
 				address = GET_LE_LONG_S(device_config.pci_config_header.header0,rom_address);
 				if (address!=0) {
-					fprintf(output_handle, "  ROM at 0x%08x\n", address);
+					fprintf(output_handle, "  Expansion ROM at 0x%08x\n", address & PCI_BASE_ADDRESS_MEM_MASK);
 				}
 
 				fprintf(output_handle,
@@ -310,9 +284,10 @@ void DemoPciLoop(void)
 			case 1:
 				fprintf(output_handle, " PCI-to-PCI bridge device\n");
 				
-				address = GET_LE_LONG_S(device_config.pci_config_header.header1, address);
-				if (address!=0) {
-					fprintf(output_handle, "  Memory at 0x%08x\n", address);
+				i = 0;
+				while (i<2) {
+					i += print_bar(device_handle, i,
+						(unsigned long *) &device_config.pci_config_header.header1.bar[0]);
 				}
 
 				fprintf(output_handle,
@@ -325,11 +300,17 @@ void DemoPciLoop(void)
 
 				address = GET_LE_LONG_S(device_config.pci_config_header.header1, rom_address);
 				if (address!=0) {
-					fprintf(output_handle, "  ROM at 0x%08x\n", address);
+					fprintf(output_handle, "  Expansion ROM at 0x%08x\n", address & PCI_BASE_ADDRESS_MEM_MASK);
 				}
 				break;
 			case 2:
 				fprintf(output_handle, " CardBus bridge device\n");
+
+				i = 0;
+				while (i<1) {
+					i += print_bar(device_handle, i,
+						(unsigned long *) &device_config.pci_config_header.header2.bar[0]);
+				}
 
 				fprintf(output_handle,
 					"  Bus: primary=%d, card=%d, subordinate=%d, latency=%d\n",
@@ -443,6 +424,54 @@ void DemoPciLoop(void)
 			fprintf(output_handle, "  Device has detected parity error\n");
 		}
 	}
+}
+
+int print_bar(long device_handle, int num_bar, unsigned long *bar_list)
+{
+	int num_bits = 32, prefetch=0;
+	unsigned long bar, address, size;
+
+	size = pci_read_mem_size(device_handle, 0x10+(num_bar<<2));
+	if (size==0) {
+		return 1;
+	}
+
+	fprintf(output_handle, "  BAR %d:", num_bar);
+
+	address = bar = LE_LONG(bar_list[num_bar]);
+
+	if ((bar & 1)==0) {
+		/* Mem */
+		switch((bar>>1) & 3) {
+			case 1:	num_bits = 20; break;
+			case 2:	num_bits = 64; break;
+			case 3:	num_bits = 0; break;
+		}
+
+		if (num_bits==64) {
+			fprintf(output_handle, "0x%08x", LE_LONG(bar_list[num_bar+1]));
+		}
+
+		address &= PCI_BASE_ADDRESS_MEM_MASK;
+		prefetch = bar & PCI_BASE_ADDRESS_MEM_PREFETCH;
+	} else {
+		/* I/O */
+		address &= PCI_BASE_ADDRESS_IO_MASK;
+	}
+
+	fprintf(output_handle, "%s%08x [%4d %cB] %s, %d bits, %s\n",
+		(num_bits==64 ? "" : "0x"),
+		address,
+		(size<1<<10 ? size :
+			(size<1<<20 ? size>>10 : size>>20)),
+		(size<1<<10 ? ' ' :
+			(size<1<<20 ? 'K' : 'M')),
+		(bar & 1)==0 ? "MEM" : "I/O",
+		num_bits,
+		prefetch ? "prefetchable" : "non-prefetchable"
+	);
+
+	return (num_bits==64 ? 2 : 1);
 }
 
 /*--- Little demo loop ---*/

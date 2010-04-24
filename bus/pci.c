@@ -98,27 +98,18 @@ long pci_read_config(unsigned long device_handle, pci_config_t *device_config)
 {
 	long result=PCI_SUCCESSFUL;
 	int i;
-	unsigned char *buffer;
+	unsigned long *buffer;
 
-	/* bytes 0x00 to 0x3f */
-	buffer = (unsigned char *)device_config;
-	for (i=0; i<0x40; i++) {
-		result = pci_read_config_byte(device_handle, buffer, i);
-		if (result<0) {
-			return result;
-		}
-		buffer++;
-	}
+	buffer = (unsigned long *)device_config;
+	for (i=0; i<0x80/4; i++) {
+		unsigned long value;
 
-	/* bytes 0x40 to 0x7f */
-	buffer = (unsigned char *)device_config;
-	buffer += 0x40;
-	for (i=0x40; i<0x7f; i++) {
-		result = pci_read_config_byte(device_handle, buffer, i);
+		result = pci_read_config_long(device_handle, &value, i<<2);
 		if (result<0) {
-			return 0x40;
+			return i<<2;
 		}
-		buffer++;
+
+		buffer[i] = LE_LONG(value);
 	}
 
 	return 0x80;
@@ -136,13 +127,13 @@ static unsigned long pci_size(unsigned long base, unsigned long mask)
 unsigned long pci_read_mem_size(unsigned long device_handle, int config_register)
 {
 	unsigned long old_register, size;
-	unsigned long oldreg_be, size_be;
+	int num_bits;
 	
 	/* Read current register value */
 	pci_read_config_long(device_handle, &old_register, config_register);
 
 	/* Write not(0) */
-	pci_write_config_long(device_handle, config_register, 0xffffffff);
+	pci_write_config_long(device_handle, config_register, 0xffffffffUL);
 
 	/* Read value */
 	pci_read_config_long(device_handle, &size, config_register);
@@ -158,16 +149,15 @@ unsigned long pci_read_mem_size(unsigned long device_handle, int config_register
 		old_register = 0;
 	}
 
-	oldreg_be = LE_LONG(old_register);
-	size_be = LE_LONG(size);
-
-	if ((oldreg_be & PCI_BASE_ADDRESS_SPACE) == PCI_BASE_ADDRESS_SPACE_MEMORY) {
-		size_be = pci_size(size_be, PCI_BASE_ADDRESS_MEM_MASK);
-	} else {
-		size_be = pci_size(size_be, PCI_BASE_ADDRESS_IO_MASK & 0xffff);
+	/* Find first 0 bit */
+	num_bits = 31;
+	for (num_bits=31; num_bits>0; --num_bits) {
+		if ((size & (1<<num_bits))==0) {
+			break;
+		}
 	}
 
-	return size_be;
+	return 1<<(num_bits+1);
 }
 
 unsigned long pci_read_mem_base(unsigned long adr, int *memtype)

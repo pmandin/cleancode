@@ -208,8 +208,8 @@
 
 /* Header 0, normal devices */
 typedef struct {
-	/* 0x14-0x27 */
-	unsigned char address[20];
+	/* 0x10-0x27 */
+	unsigned char bar[6*4];
 
 	/* 0x28-0x2f */
 	unsigned char cardbus_cis[4];
@@ -237,8 +237,8 @@ typedef struct {
 
 /* Header 1, PCI-PCI bridges */
 typedef struct {
-	/* 0x14-0x17 */
-	unsigned char address[4];
+	/* 0x10-0x17 */
+	unsigned char bar[2*4];
 
 	/* 0x18-0x1b */
 	unsigned char primary_bus;
@@ -274,6 +274,9 @@ typedef struct {
 
 /* Header 2, cardbus bridges */
 typedef struct {
+	/* 0x10-0x13 */
+	unsigned char bar[1*4];
+
 	/* 0x14-0x1b */
 	unsigned char reserved1[2];
 	unsigned char secondary_status[2];
@@ -329,10 +332,7 @@ typedef struct {
 	unsigned char header_type;
 	unsigned char are;
 
-	/* 0x10-0x13 */
-	unsigned char address[4];
-
-	/* 0x14-0x7f */
+	/* 0x10-0x7f */
 	union {
 		pci_config_header0_t header0;
 		pci_config_header1_t header1;
