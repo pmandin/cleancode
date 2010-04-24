@@ -436,7 +436,7 @@ int print_bar(long device_handle, int num_bar, unsigned long *bar_list)
 		return 1;
 	}
 
-	fprintf(output_handle, "  BAR %d:", num_bar);
+	fprintf(output_handle, "  BAR %d: ", num_bar);
 
 	address = bar = LE_LONG(bar_list[num_bar]);
 
