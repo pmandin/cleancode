@@ -280,6 +280,8 @@ Availability: All systems: need PCIBios or XPCI driver
 Demo program: bupc.ttp
 Values read:  List of PCI devices, and some infos
 
+Use -dumpbios parameter to dump the ROMs of the cards.
+
 9.2 SCSIdrv
 -----------
 
