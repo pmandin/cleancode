@@ -20,6 +20,8 @@
 
 #include <stdio.h>
 #include <string.h>
+#include <fcntl.h>
+#include <unistd.h>
 
 #include <mint/osbind.h>
 #include <mint/cookie.h>
@@ -49,12 +51,17 @@ char classname[64];
 char subclassname[64];
 char progifname[64];
 
+int dump_pci_bios = 0;
+int num_bios = 0;
+
 /*--- Functions prototypes ---*/
 
 void DemoPciLoop(void);
 void DemoLoop(void);
 
 int print_bar(long device_handle, int num_bar, unsigned long *bar_list);
+
+void dump_card_bios(long device_handle, unsigned long bar_ptr);
 
 /*--- Functions ---*/
 
@@ -66,6 +73,10 @@ int main(int argc, char **argv)
 	PAR_TestRedirect(argc, argv);
 	if (output_to_file) {
 		PAR_RedirectStdout();
+	}
+
+	if (PAR_Check("-dumpbios", argc, argv) != -1) {
+		dump_pci_bios = 1;
 	}
 
 	fprintf(output_handle, "XPCI cookie: ");
@@ -271,6 +282,9 @@ void DemoPciLoop(void)
 				address = GET_LE_LONG_S(device_config.pci_config_header.header0,rom_address);
 				if (address!=0) {
 					fprintf(output_handle, "  Expansion ROM at 0x%08x\n", address & PCI_BASE_ADDRESS_MEM_MASK);
+					if (dump_pci_bios) {
+						dump_card_bios(device_handle, address & PCI_BASE_ADDRESS_MEM_MASK);
+					}
 				}
 
 				fprintf(output_handle,
@@ -301,6 +315,9 @@ void DemoPciLoop(void)
 				address = GET_LE_LONG_S(device_config.pci_config_header.header1, rom_address);
 				if (address!=0) {
 					fprintf(output_handle, "  Expansion ROM at 0x%08x\n", address & PCI_BASE_ADDRESS_MEM_MASK);
+					if (dump_pci_bios) {
+						dump_card_bios(device_handle, address & PCI_BASE_ADDRESS_MEM_MASK);
+					}
 				}
 				break;
 			case 2:
@@ -344,6 +361,9 @@ void DemoPciLoop(void)
 						fprintf(output_handle, "\n");
 					}
 				}
+				break;
+			default:
+				fprintf(output_handle, " Unknown header type\n");
 				break;
 		}
 
@@ -472,6 +492,61 @@ int print_bar(long device_handle, int num_bar, unsigned long *bar_list)
 	);
 
 	return (num_bits==64 ? 2 : 1);
+}
+
+void dump_card_bios(long device_handle, unsigned long bar_ptr)
+{
+	char filename[16];
+	int f, rom_found;
+	unsigned char *rsc;
+	unsigned long length;
+
+	sprintf(filename, "bios%d.bin", num_bios++);
+
+	rsc = (unsigned char *) pci_get_resource(device_handle);
+	f = rom_found = length = 0;
+	for (;;) {
+		pcibios_ressource_t *ressource = (pcibios_ressource_t *) rsc;
+
+		fprintf(output_handle, "Ressource %d:\n", f);
+		fprintf(output_handle, " Type : 0x%04x: %s\n", ressource->flags,
+			(ressource->flags & PCIBIOS_RSC_IO ? "I/O" :
+				(ressource->flags & PCIBIOS_RSC_ROM ? "ROM" : "MEM")
+			));
+		fprintf(output_handle, " Start : 0x%08x\n", ressource->start);
+		fprintf(output_handle, " Length: %d\n", ressource->length);
+		fprintf(output_handle, " Offset: 0x%08x\n", ressource->offset);
+		fprintf(output_handle, " DMA offset: 0x%08x\n", ressource->dma_offset);
+
+		if (ressource->length < 1<<20) {
+			if ((ressource->flags & PCIBIOS_RSC_ROM) /*|| (bar_ptr == ressource->start)*/) {
+				rom_found = 1;
+				bar_ptr = ressource->start + ressource->offset;
+				length = ressource->length;
+				break;
+			}
+		}
+
+		if (ressource->flags & PCIBIOS_RSC_LAST) {
+			break;
+		}
+
+		++f;
+		rsc += ressource->next;
+	}
+
+	if (!rom_found) {
+		return;
+	}
+
+	f = open(filename, O_WRONLY|O_CREAT);
+	if (f == -1) {
+		fprintf(stderr, "Can not create file %s\n", filename);
+		return;
+	}
+
+	write(f, bar_ptr, length);
+	close(f);
 }
 
 /*--- Little demo loop ---*/

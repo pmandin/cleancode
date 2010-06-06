@@ -345,6 +345,23 @@ typedef struct {
 	unsigned long length;
 } pcibios_mmu_memstruct_t;
 
+typedef struct {
+	unsigned short next;
+	unsigned short flags;
+	unsigned long start;
+	unsigned long length;
+	unsigned long offset;
+	unsigned long dma_offset;
+} pcibios_ressource_t;
+
+#define PCIBIOS_RSC_IO		0x4000
+#define PCIBIOS_RSC_ROM		0x2000
+#define PCIBIOS_RSC_LAST	0x8000
+#define PCIBIOS_FLG_8BIT	0x0100
+#define PCIBIOS_FLG_16BIT	0x0200
+#define PCIBIOS_FLG_32BIT	0x0400
+#define PCIBIOS_FLG_ENDMASK	0x000f
+
 /*--- Functions prototypes ---*/
 
 long pci_init(void);
