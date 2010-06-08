@@ -330,7 +330,7 @@ typedef struct {
 	unsigned char cache_line_size;
 	unsigned char latency_timer;
 	unsigned char header_type;
-	unsigned char are;
+	unsigned char bist;
 
 	/* 0x10-0x7f */
 	union {

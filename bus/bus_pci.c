@@ -245,7 +245,10 @@ void DemoPciLoop(void)
 		fprintf(output_handle, "  %s function device\n",
 			(device_config.header_type & 0x80 ? "multi" : "single")
 		);
-		fprintf(output_handle, " ARE: 0x%02x\n",device_config.are);
+		fprintf(output_handle, " BIST: 0x%02x\n",device_config.bist);
+		if (device_config.bist & PCI_BIST_CAPABLE) {
+			fprintf(output_handle, "  Device has Built-In Self Test\n");
+		}
 
 		switch(device_config.header_type & 0x7f) {
 			case 0:
