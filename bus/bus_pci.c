@@ -242,9 +242,12 @@ void DemoPciLoop(void)
 		fprintf(output_handle, " Cache line size: 0x%02x\n",device_config.cache_line_size);
 		fprintf(output_handle, " Latency timer: 0x%02x\n",device_config.latency_timer);
 		fprintf(output_handle, " Header type: 0x%02x\n",device_config.header_type);
+		fprintf(output_handle, "  %s function device\n",
+			(device_config.header_type & 0x80 ? "multi" : "single")
+		);
 		fprintf(output_handle, " ARE: 0x%02x\n",device_config.are);
 
-		switch(device_config.header_type) {
+		switch(device_config.header_type & 0x7f) {
 			case 0:
 				fprintf(output_handle, " Normal PCI device:\n");
 
