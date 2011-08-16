@@ -551,7 +551,7 @@ void dump_card_bios(long device_handle, unsigned long bar_ptr)
 		return;
 	}
 
-	write(f, bar_ptr, length);
+	write(f, (void *) bar_ptr, length);
 	close(f);
 }
 
