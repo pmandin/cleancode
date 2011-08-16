@@ -111,10 +111,10 @@ void DisplayMmuTree040_060(void)
 {
 	fprintf(output_handle, " tc  : 0x%08x\n", hw_mmu_tcr);
 		printTc040();
-	fprintf(output_handle, " urp : 0x%08x\n", hw_mmu_urp);
-		fprintf(output_handle, "  base address: 0x%08x\n", hw_mmu_urp & 0xfffffe00UL);
-	fprintf(output_handle, " srp : 0x%08x\n", hw_mmu_srp);
-		fprintf(output_handle, "  base address: 0x%08x\n", hw_mmu_srp & 0xfffffe00UL);
+	fprintf(output_handle, " urp : 0x%08x\n", hw_mmu_urp[0]);
+		fprintf(output_handle, "  base address: 0x%08x\n", hw_mmu_urp[0] & 0xfffffe00UL);
+	fprintf(output_handle, " srp : 0x%08x\n", hw_mmu_srp[0]);
+		fprintf(output_handle, "  base address: 0x%08x\n", hw_mmu_srp[0] & 0xfffffe00UL);
 	fprintf(output_handle, " dtt0: 0x%08x\n", hw_mmu_dttr0);
 		printTtr040(hw_mmu_dttr0);
 	fprintf(output_handle, " dtt1: 0x%08x\n", hw_mmu_dttr1);
