@@ -45,7 +45,7 @@ int main(int argc, char **argv)
      * relative mouse motion, and joystick on port 1
 	 */
 
-	memset(Ikbd_keyboard, 0, 128);
+	memset((void *) Ikbd_keyboard, 0, sizeof(Ikbd_keyboard));
 	Ikbd_mousex = Ikbd_mousey = Ikbd_mouseb = Ikbd_joystick = 0;
 	prev_joystick = 0;
 

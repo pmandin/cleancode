@@ -41,7 +41,7 @@ int main(int argc, char **argv)
 
 	/* Availability: all Atari machines, Hades, Medusa */
 
-	memset(Ikbd_keyboard, KEY_UNDEFINED, sizeof(Ikbd_keyboard));
+	memset((void *) Ikbd_keyboard, KEY_UNDEFINED, sizeof(Ikbd_keyboard));
 	Ikbd_mousex = Ikbd_mousey = Ikbd_mouseb = Ikbd_joystick = 0;
 
 	/* Install our asm handler */
