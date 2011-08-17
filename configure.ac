@@ -2,7 +2,7 @@
 # Process this file with autoconf to produce a configure script.
 
 AC_PREREQ(2.59)
-AC_INIT(cleancode, 0.31, patmandin@gmail.com)
+AC_INIT(cleancode, 0.32, patmandin@gmail.com)
 AC_CONFIG_SRCDIR([video/xbios.c])
 AC_CONFIG_HEADER([config.h])
 AC_CONFIG_AUX_DIR([autotools])
