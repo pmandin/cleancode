@@ -40,7 +40,8 @@ _XbiosInstall:
 
 	movel	sp@(8),d0
 	beqs	no_new_mouse_vector
-	movel	a0@(16),oldmousevector
+	movel	a0@(16),d1
+	movel	d1,oldmousevector
 	movel	d0,a0@(16)
 no_new_mouse_vector:
 
@@ -58,26 +59,52 @@ no_new_mouse_vector:
 	.ascii "LSDL"
 	.comm	oldmousevector,4*1
 _XbiosMouse:
+#if defined(__mcoldfire__)
+	lea	sp@(-8),sp
+	moveml	d0-d1,sp@
+#else
 	movel	d0,sp@-
+#endif
 
 	/* Mouse buttons */
 	moveb	(a0),d0
+#if defined(__mcoldfire__)
+	andl	#3,d0
+#else
 	andw	#3,d0
+#endif
 	movew	d0,_Xbios_mouseb
 
 	/* X movement */
 	moveb	a0@(1),d0
 	extw	d0
+#if defined(__mcoldfire__)
+	movew	_Xbios_mousex,d1
+	addl	d1,d0
+	movew	d0,_Xbios_mousex
+#else
 	addw	d0,_Xbios_mousex
+#endif
 
 	/* Y movement */
 	moveb	a0@(2),d0
 	extw	d0
+#if defined(__mcoldfire__)
+	movew	_Xbios_mousey,d1
+	addl	d1,d0
+	movew	d0,_Xbios_mousey
+#else
 	addw	d0,_Xbios_mousey
+#endif
+
+#if defined(__mcoldfire__)
+	moveml	sp@,d0-d1
+	lea	sp@(8),sp
+#else
+	movel	sp@+,d0
+#endif
 
 	/* Jump through old vector */
-	movel	sp@+,d0
-
 	movel	oldmousevector,sp@-
 	rts
 
