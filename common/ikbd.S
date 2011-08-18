@@ -127,8 +127,8 @@ ikbd_restoreierb:
 ikbd_restoreimrb:
 
 #if defined(__mcoldfire__)
-	movel	old_ikbd,d0
-	movel	d0,0x118:w
+	movel	old_ikbd,a0
+	movel	a0,0x118:w
 #else
 	movel	old_ikbd,0x118:w
 #endif
