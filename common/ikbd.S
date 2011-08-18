@@ -164,12 +164,21 @@ ikbd_finbuffer:
 	.ascii	"LSDL"
 	.comm	old_ikbd,4
 ikbd:
-	| test if byte coming from IKBD or MIDI
-
-	btst	#0,0xfffffc00.w
-	beqs	ikbd_endit
-
+#if defined(__mcoldfire__)
+	lea	sp@(-12),sp
+	moveml	d0-d1/a0,sp@
+#else
 	moveml	d0-d1/a0,sp@-
+#endif
+
+	| Check if source is IKBD or MIDI
+#if defined(__mcoldfire__)
+	moveql	#0,d0
+	btst	d0,0xfffffc00.w
+#else
+	btst	#0,0xfffffc00.w
+#endif
+	beqs	ikbd_oldmidi
 
 	moveb	0xfffffc02:w,d0
 
@@ -185,15 +194,33 @@ ikbd:
 	cmpb	#0xfc,d0
 	bpls	ikbd_no_mouse
 
+	| Mouse packet, byte #1
+
 ikbd_yes_mouse:
+#if defined(__mcoldfire__)
+	andl	#3,d0
+#else
 	andw	#3,d0
+#endif
 	movew	d0,_Ikbd_mouseb
 
+#if defined(__mcoldfire__)
+	movel	#ikbd_mousex,d0
+	movel	d0,0x118:w
+#else
 	movel	#ikbd_mousex,0x118:w
+#endif
 	bras	ikbd_endit_stack
 
+	| Joystick packet, byte #1
+
 ikbd_yes_joystick:
+#if defined(__mcoldfire__)
+	movel	#ikbd_joystick,d0
+	movel	d0,0x118:w
+#else
 	movel	#ikbd_joystick,0x118:w
+#endif
 	bras	ikbd_endit_stack
 
 	| Keyboard press/release
@@ -201,60 +228,150 @@ ikbd_yes_joystick:
 ikbd_no_mouse:
 	moveb	d0,d1
 	lea	_Ikbd_keyboard,a0
+#if defined(__mcoldfire__)
 	andl	#0x7f,d1
+	btst	#7,d0
+	spl	d0
+	moveb	d0,a0@(0,d1:l)
+#else
+	andw	#0x7f,d1
 	tas	d0
 	spl	a0@(0,d1:w)
+#endif
+
+	| End of interrupt
 
 ikbd_endit_stack:
+#if defined(__mcoldfire__)
+	moveql	#6,d0
+	bclr	d0,0xfffffa11:w
+
+	moveml	sp@,d0-d1/a0
+	lea	sp@(12),sp
+#else
 	moveml	sp@+,d0-d1/a0
-ikbd_endit:
+
 	bclr	#6,0xfffffa11:w
+#endif
 	rte
 
+	| Call old MIDI interrupt
+
+ikbd_oldmidi:
+#if defined(__mcoldfire__)
+	moveml	sp@,d0-d1/a0
+	lea	sp@(12),sp
+#else
+	moveml	sp@+,d0-d1/a0
+#endif
+
+	movel	old_ikbd,sp@-
+	rts
+
+	| Mouse packet, byte #2
+
 ikbd_mousex:
-	| test if byte coming from IKBD or MIDI
+#if defined(__mcoldfire__)
+	lea	sp@(-12),sp
+	moveml	d0-d1/a0,sp@
+#else
+	moveml	d0-d1/a0,sp@-
+#endif
 
+	| Check if source is IKBD or MIDI
+#if defined(__mcoldfire__)
+	moveql	#0,d0
+	btst	d0,0xfffffc00.w
+#else
 	btst	#0,0xfffffc00.w
-	beqs	ikbd_endit
-
-	movew	d0,sp@-
+#endif
+	beqs	ikbd_oldmidi
 
 	moveb	0xfffffc02:w,d0
 	extw	d0
+#if defined(__mcoldfire__)
+	movew	_Ikbd_mousex,d1
+	addl	d1,d0
+	movew	d0,_Ikbd_mousex
+
+	movel	#ikbd_mousey,d0
+	movel	d0,0x118:w
+#else
 	addw	d0,_Ikbd_mousex
 
-	movew	sp@+,d0
-
 	movel	#ikbd_mousey,0x118:w
-	bras	ikbd_endit
+#endif
+	bras	ikbd_endit_stack
+
+	| Mouse packet, byte #3
 
 ikbd_mousey:
-	| test if byte coming from IKBD or MIDI
+#if defined(__mcoldfire__)
+	lea	sp@(-12),sp
+	moveml	d0-d1/a0,sp@
+#else
+	moveml	d0-d1/a0,sp@-
+#endif
 
+	| Check if source is IKBD or MIDI
+#if defined(__mcoldfire__)
+	moveql	#0,d0
+	btst	d0,0xfffffc00.w
+#else
 	btst	#0,0xfffffc00.w
-	beqs	ikbd_endit
-
-	movew	d0,sp@-
+#endif
+	beqs	ikbd_oldmidi
 
 	moveb	0xfffffc02:w,d0
 	extw	d0
+#if defined(__mcoldfire__)
+	movew	_Ikbd_mousey,d1
+	addl	d1,d0
+	movew	d0,_Ikbd_mousey
+
+	movel	#ikbd,d0
+	movel	d0,0x118:w
+#else
 	addw	d0,_Ikbd_mousey
 
-	movew	sp@+,d0
-
 	movel	#ikbd,0x118:w
-	bras	ikbd_endit
+#endif
+	bras	ikbd_endit_stack
+
+	| Joystick packet, byte #2
 
 ikbd_joystick:
-	| test if byte coming from IKBD or MIDI
+#if defined(__mcoldfire__)
+	lea	sp@(-12),sp
+	moveml	d0-d1/a0,sp@
+#else
+	moveml	d0-d1/a0,sp@-
+#endif
 
+	| Check if source is IKBD or MIDI
+#if defined(__mcoldfire__)
+	moveql	#0,d0
+	btst	d0,0xfffffc00.w
+#else
 	btst	#0,0xfffffc00.w
-	beqs	ikbd_endit
+#endif
+	beqs	ikbd_oldmidi
 
+#if defined(__mcoldfire__)
+	moveb	0xfffffc02:w,d0
+	moveb	d0,_Ikbd_joystick+1
+
+	movel	#ikbd,d0
+	movel	d0,0x118:w
+
+	bra	ikbd_endit_stack
+#else
 	moveb	0xfffffc02:w,_Ikbd_joystick+1
 
 	movel	#ikbd,0x118:w
-	bras	ikbd_endit
+
+	bras	ikbd_endit_stack
+#endif
 
 	.bss
 	
