@@ -38,7 +38,8 @@ _XbiosInstall:
 
 	movel	sp@(12),d0
 	beqs	no_new_joystick_vector
-	movel	a0@(24),oldjoystickvector
+	movel	a0@(24),d1
+	movel	d1,oldjoystickvector
 	movel	d0,a0@(24)
 no_new_joystick_vector:
 
@@ -56,18 +57,32 @@ no_new_joystick_vector:
 	.ascii "LSDL"
 	.comm	oldjoystickvector,4*1
 _XbiosJoystickVector:
+#if defined(__mcoldfire__)
+	lea	sp@(-8),sp
+	moveml	d0/a1,sp@
+#else
 	moveml	d0/a1,sp@-
+#endif
 
 	/* New joystick state */
 	moveb	a0@(1),d0
+#if defined(__mcoldfire__)
+	andl	#0x8f,d0
+#else
 	andw	#0x8f,d0
+#endif
 	movew	d0,_Xbios_joystick
 
 	/* Jump through old vector */
 	movel	oldjoystickvector,a1
 	jsr	(a1)
 
+#if defined(__mcoldfire__)
+	moveml	sp@,d0/a1
+	lea	sp@(8),sp
+#else
 	moveml	sp@+,d0/a1
+#endif
 	rts
 
 	.data
