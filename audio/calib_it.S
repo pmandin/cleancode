@@ -29,11 +29,26 @@
 
 	.text
 _CalibInterrupt:
+#if defined(__mcoldfire__)
+	movel	d0,sp@-
+	
+	movel	0x4ba:w,d0
+	movel	d0,_CalibSystemTic
+	movel	0xffffffff,d0
+	movel	d0,_CalibDone
+
+	/* Clear service bit, so other MFP interrupts can work */
+	moveq	#5,d0
+	bclr	d0,0xfffffa0f:w
+
+	movel	sp@+,d0
+#else
 	movel	0x4ba:w,_CalibSystemTic
 	movel	0xffffffff,_CalibDone
 
 	/* Clear service bit, so other MFP interrupts can work */
 	bclr	#5,0xfffffa0f:w
+#endif
 	rte
 
 /*--- Variables ---*/
