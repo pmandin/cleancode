@@ -22,8 +22,8 @@
 #define _CALIB_IT_H
 
 /*--- Variables ---*/
-extern long CalibDone;		/* Interrupt finished */
-extern long CalibSystemTic;	/* Tics of _hz_200, when finished */
+extern volatile long CalibDone;		/* Interrupt finished */
+extern volatile long CalibSystemTic;	/* Tics of _hz_200, when finished */
 
 /*--- Functions ---*/
 void CalibInterrupt(void);
