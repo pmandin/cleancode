@@ -32,7 +32,12 @@
 /*--- Install our IKBD vector ---*/
 
 _IkbdInstall:
+#if defined(__mcoldfire__)
+	lea	sp@(-16),sp
+	moveml	d0-d1/a0-a1,sp@
+#else
 	moveml	d0-d1/a0-a1,sp@-
+#endif
 
 	| Disable all interrupts
 
@@ -42,28 +47,58 @@ _IkbdInstall:
 
 	lea	0xfffffa00:w,a0
 	btst	#6,a0@(0x09)
-	sne		ikbd_ierb
+#if defined(__mcoldfire__)
+	sne	d0
+	move.b	d0,ikbd_ierb
+#else
+	sne	ikbd_ierb
+#endif
 	btst	#6,a0@(0x15)
-	sne		ikbd_imrb
+#if defined(__mcoldfire__)
+	sne	d0
+	move.b	d0,ikbd_imrb
+#else
+	sne	ikbd_imrb
+#endif
 
 	| Set our MFP routine
 
+#if defined(__mcoldfire__)
+	movel	0x118:w,d0
+	movel	d0,old_ikbd
+	lea	ikbd,a0
+	movel	a0,0x118:w
+	moveq	#6,d0
+	bset	d0,0xfffffa09:w	| IERB
+	bset	d0,0xfffffa15:w	| IMRB
+#else
 	movel	0x118:w,old_ikbd
 	movel	#ikbd,0x118:w
 	bset	#6,0xfffffa09:w	| IERB
 	bset	#6,0xfffffa15:w	| IMRB
+#endif
 
 	| Set relative mouse motion mode
 	| needed because running a .tos or .ttp program
 	| disable the mouse (entering VT52 textmode)
 
-	moveb	#0x08,0xfffffc02.w
+#if defined(__mcoldfire__)
+	moveq	#8,d0
+	moveb	d0,0xfffffc02.w
+#else
+	moveb	#8,0xfffffc02.w
+#endif
 
 	| Re-enable interrupts
 
 	movew	#0x2300,sr
 
+#if defined(__mcoldfire__)
+	moveml	sp@,d0-d1/a0-a1
+	lea	sp@(16),sp
+#else
 	moveml	sp@+,d0-d1/a0-a1
+#endif
 	rts
 
 /*--- Uninstall our IKBD vector ---*/
@@ -91,7 +126,12 @@ ikbd_restoreierb:
 	bset	#6,a0@(0x15)
 ikbd_restoreimrb:
 
+#if defined(__mcoldfire__)
+	movel	old_ikbd,d0
+	movel	d0,0x118:w
+#else
 	movel	old_ikbd,0x118:w
+#endif
 
 	| Clear keyboard buffer
 
