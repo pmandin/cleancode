@@ -22,8 +22,8 @@
 #include <string.h>
 
 #include <mint/osbind.h>
+#include <mint/cdromio.h>
 
-#include "cdromio.h"
 #include "param.h"
 
 /*--- Defines ---*/

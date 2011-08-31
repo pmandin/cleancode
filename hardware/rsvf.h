@@ -39,6 +39,6 @@ typedef struct {
 	unsigned char reserved1;
 	unsigned char bios_number;	/* Device number for BIOS functions */
 	unsigned char reserved2;
-} __attribute__((packed)) rsvf_object_t;
+} rsvf_object_t;
 
 #endif /* _RSVF_H */

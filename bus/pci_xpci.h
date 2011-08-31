@@ -21,10 +21,6 @@
 #ifndef _PCIXPCI_H
 #define _PCIXPCI_H
 
-/*--- Defines ---*/
-
-#define C_XPCI 0x58504349L
-
 /*--- Functions prototypes ---*/
 
 long xpci_init(void);

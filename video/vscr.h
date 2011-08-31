@@ -31,6 +31,6 @@ typedef struct {
 	unsigned short	version;
 	unsigned short	posx,posy;	/* Position in virtual screen */
 	unsigned short	width,height;	/* Size of window (physical screen) */
-} __attribute__((packed)) vscr_cookie_t;
+} vscr_cookie_t;
 
 #endif /* VIRTUALSCREEN_H */

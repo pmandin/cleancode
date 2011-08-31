@@ -8,5 +8,3 @@ cdmi_ttp_LDADD = $(top_builddir)/common/libparam.a
 
 INCLUDES = -I$(top_srcdir)/common
 
-libmetadosincludedir = $(includedir)
-libmetadosinclude_HEADERS = metados.h cdromio.h

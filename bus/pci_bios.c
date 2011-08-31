@@ -232,7 +232,7 @@ typedef struct {
 	unsigned long *subcookie;
 	unsigned long version;
 	pci_routine_t pci_routines[43];
-} __attribute__((packed)) pci_cookie_t;
+} pci_cookie_t;
 
 /*--- Variables ---*/
 

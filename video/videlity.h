@@ -21,12 +21,6 @@
 #ifndef VIDELITY_H
 #define VIDELITY_H
 
-/*--- Defines ---*/
-
-#ifndef C_VDLY
-#define C_VDLY 0x56444c59L
-#endif
-
 /*--- Types ---*/
 
 typedef struct {
@@ -34,7 +28,7 @@ typedef struct {
 	unsigned short bpp;
 	unsigned short width;
 	unsigned short height;
-} __attribute__((packed)) vdly_modeinfo_t;
+} vdly_modeinfo_t;
 
 typedef struct {
 	void (*readmodes)(vdly_modeinfo_t *vdly_modeinfo);
@@ -45,7 +39,7 @@ typedef struct {
 	void (*setmode)(unsigned short modecode, void *vid_registers);
 	unsigned char *name;
 	void (*undef7)(void);
-} __attribute__((packed)) cookie_vdly_t;
+} cookie_vdly_t;
 
 /*--- Functions prototypes ---*/
 

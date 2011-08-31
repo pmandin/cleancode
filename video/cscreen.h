@@ -25,10 +25,6 @@
 
 /*--- Defines ---*/
 
-#ifndef C_CNTS
-#define C_CNTS 0x434e5453L
-#endif
-
 #define CSCREEN_ENERGYSTAR		(1<<9)
 #define CSCREEN_SAVER			(1<<10)
 #define CSCREEN_VIRTUAL			(1<<11)
@@ -53,7 +49,7 @@ typedef struct {
 	unsigned short	hsize;	/* hauteur en mm de l'ecran (1.1) */
 	unsigned short	dummy[21];
 	unsigned char	name[32];	/* nom du mode video */
-} __attribute__((packed)) centscreen_mode_t;
+} centscreen_mode_t;
 
 /*--- Functions prototypes ---*/
 

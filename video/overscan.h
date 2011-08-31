@@ -25,8 +25,7 @@
 
 /*--- Types ---*/
 
-typedef struct
-{
+typedef struct {
    unsigned short low_w, mid_w, high_w;	/* Breite in Pixeln */
    unsigned short low_h, mid_h, high_h;	/* Höhe   in Pixeln */
    unsigned long low_off, mid_off, high_off;	/* Offset Bildspeicher<>Logbase */
@@ -36,7 +35,7 @@ typedef struct
    unsigned char setup_shift;	/* Shiftcode für Setup (Maske) */
    unsigned char invert_shift;	/* Shiftcode zum Invert. des Modus */
    unsigned char abort_shift;	/* Shiftcode zum Abbrechen */
-} __attribute__((packed)) OVERPATCH;
+} OVERPATCH;
 
 /*--- Functions prototypes ---*/
 /* FIXME: I don't have Overscan documentation, these bindings are WRONG */

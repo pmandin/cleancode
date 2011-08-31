@@ -37,7 +37,7 @@ typedef struct {
 	unsigned short	length;	/* constant = 0x46 */
 	unsigned short	dummy[(0x23)-2];	/* 0x23 = length/2 */
 	void			(*setmode)(void);	/* Function to set a new mode */
-} __attribute__((packed)) vi_cookie_t;
+} vi_cookie_t;
 
 /* VI2.DAT file definition */
 
@@ -58,7 +58,7 @@ typedef struct {
 	unsigned short	intfreq1;	/* Videl clocks defined */
 	unsigned short	intfreq2;	/*  Freqs stored are divided by 100000 */
 	unsigned short	extfreq;
-} __attribute__((packed)) vi_header_t;
+} vi_header_t;
 
 typedef struct {
 	unsigned short	modecode;	/* Video mode definition */
@@ -85,7 +85,7 @@ typedef struct {
 	unsigned short	freqv_div;	/* Vertical frequency divisor */
 	unsigned short	height;		/* Vertical resolution */
 	unsigned short	dummy3[19];
-} __attribute__((packed)) vi_mode_t;
+} vi_mode_t;
 
 /*--- Variables ---*/
 

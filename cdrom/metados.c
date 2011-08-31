@@ -22,9 +22,9 @@
 #include <string.h>
 
 #include <mint/osbind.h>
+#include <mint/cdromio.h>
+#include <mint/metados.h>
 
-#include "cdromio.h"
-#include "metados.h"
 #include "param.h"
 
 /*--- Defines ---*/

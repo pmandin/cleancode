@@ -34,7 +34,7 @@ struct JOYPAD_IO_S {
 	unsigned short paddles[4];	/* 10,12,14,16 */
 	unsigned short dummy2[4];	/* 18,1a,1c,1e */
 	unsigned short lightpens[2];	/* 20,22 */ 
-} __attribute__((packed));
+};
 #define JOYPAD_IO ((*(volatile struct JOYPAD_IO_S *)JOYPAD_IO_BASE))
 
 /* Joysticks buttons+directions */

@@ -37,21 +37,21 @@ typedef struct {
 	unsigned short	clock;		/* External clock number */
 	unsigned short	dummy4[5];
 	unsigned long	mon_info[4];	/* Info for each type of monitor */
-} __attribute__((packed)) sblast2_header_t;
+} sblast2_header_t;
 
 typedef struct {
 	unsigned char	name[32];
-} __attribute__((packed)) sblast2_name_t;
+} sblast2_name_t;
 
 typedef struct {
 	unsigned short	num_regs;	/* Number of video registers */
 	/* This structure is followed in memory by an array of sblast2_reg_t */
-} __attribute__((packed)) sblast2_regheader_t;
+} sblast2_regheader_t;
 
 typedef struct {
 	unsigned long	address;	/* Address of video register */
 	unsigned short	value;		/* Value of video register */
-} __attribute__((packed)) sblast2_reg_t;
+} sblast2_reg_t;
 
 typedef struct {
 	union {
@@ -84,7 +84,7 @@ typedef struct {
 											by pointer to it in memory */
 		sblast2_regheader_t	*pointer;
 	} regs;
-} __attribute__((packed)) sblast2_mode_t;
+} sblast2_mode_t;
 
 /*--- Functions prototypes ---*/
 

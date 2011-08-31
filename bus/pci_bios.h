@@ -21,12 +21,6 @@
 #ifndef _PCIBIOS_H
 #define _PCIBIOS_H
 
-/*--- Defines ---*/
-
-#ifndef C__PCI
-#define C__PCI 0x5f504349L
-#endif
-
 /*--- Functions prototypes ---*/
 
 long pcibios_init(void);

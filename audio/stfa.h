@@ -21,10 +21,6 @@
 #ifndef _STFA_H
 #define _STFA_H
 
-/*--- Defines ---*/
-
-#define C_STFA	0x53544641L	/* Sound treiber für atari (seb/The removers) */
-
 /*--- Types ---*/
 
 typedef struct {
@@ -43,13 +39,12 @@ typedef struct {
 	void *play_stop;
 	unsigned short frequency;
 	void *set_frequency;
-	
 	unsigned short frequency_threshold;
 	unsigned short custom_freq_table;
 	unsigned short stfa_on_off;
 	void *new_drivers_list;
 	unsigned short old_bit_2_of_cookie_snd;
 	unsigned short stfa_it;
-} __attribute__((packed)) STFA_control;
+} STFA_control;
 
 #endif /* _STFA_H */

@@ -55,7 +55,7 @@ typedef struct {
 	unsigned char	r_3d4[25];
 	unsigned char	extended[3];
 	unsigned char	dummy2;
-} __attribute__((packed)) nova_resolution_t;
+} nova_resolution_t;
 
 /* cookie IMNE points to this */
 typedef struct {
@@ -119,7 +119,7 @@ typedef struct {
 	void			(*calib_in)(void);
 	unsigned char	*cal_tab;
 	unsigned char	*recal_tab;
-} __attribute__((packed)) nova_icb_t;
+} nova_icb_t;
 
 /* cookie NOVA points to this */
 typedef struct {
@@ -170,7 +170,7 @@ typedef struct {
 	void			(*p_vsync)(void);	/* Pointer to routine to vsync */
 	unsigned char	name[36];	/* Video mode name */
 	unsigned long	mem_size;	/* Global size of video memory */
-} __attribute__((packed)) nova_xcb_t;
+} nova_xcb_t;
 
 /*--- Functions prototypes ---*/
 
