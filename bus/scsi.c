@@ -214,16 +214,16 @@ typedef struct {
 	unsigned short block;	/* bits 15-0 of block address, big endian */
 	unsigned char length;
 	unsigned char control;
-} __attribute__((packed)) scsi_cmd6_t;
+} scsi_cmd6_t;
 
 typedef struct {
 	unsigned char operation;
 	unsigned char lun;
 	unsigned long block;	/* big endian */
 	unsigned char reserved;
-	unsigned short length;	/* big endian */
+	unsigned char length[2];	/* big endian */
 	unsigned char control;
-} __attribute__((packed)) scsi_cmd10_t;
+} scsi_cmd10_t;
 
 typedef struct {
 	unsigned char operation;
@@ -232,7 +232,7 @@ typedef struct {
 	unsigned long length;	/* big endian */
 	unsigned char reserved;
 	unsigned char control;
-} __attribute__((packed)) scsi_cmd12_t;
+} scsi_cmd12_t;
 
 /*--- Variables ---*/
 
@@ -276,7 +276,8 @@ static void scsi_initcmd10(scsi_cmd10_t *command, unsigned char op, unsigned cha
 	command->lun = (lun & 7)<<5;
 	command->block = block;
 	command->reserved = 0;
-	command->length = length;
+	command->length[0] = length>>8;
+	command->length[1] = length & 0xff;
 	command->control = control;
 }
 
@@ -1608,12 +1609,16 @@ long scsi_ReadUpdatedBlock(scsi_device_t *dev, void *data, unsigned long numbloc
 {
 	scsi_cmd_t	cmd;
 	scsi_cmd10_t	cmd10;
+	unsigned short	length10;
 
 	scsi_initcmd10(&cmd10, SCSI_CMD_READGENERATION, dev->lun, numblock, length & ((1<<15)-1), dev->control);
 	cmd10.lun |= (dpo & 4)<<0;
 	cmd10.lun |= (fua & 3)<<0;
 	cmd10.lun |= (reladr & 1)<<0;
-	cmd10.length |= (latest & 1)<<15;
+	length10 = (cmd10.length[0]<<8)|cmd10.length[1];
+	length10 |= (latest & 1)<<15;
+	cmd10.length[0] = length10>>8;
+	cmd10.length[1] = length10 & 0xff;
 	scsi_initcmd(&cmd, &cmd10, sizeof(cmd10), dev, data, length);
 
 	return scsidrv_in(&cmd);
