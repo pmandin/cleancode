@@ -213,7 +213,7 @@ typedef struct {
 	long (*get_msg)(short bus, unsigned short *msg);
 
 	scsi_reqdata_t *req_data;
-} __attribute__((packed)) scsidrv_t;
+} scsidrv_t;
 
 /*--- Variables ---*/
 
