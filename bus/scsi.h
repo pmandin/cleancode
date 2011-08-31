@@ -76,7 +76,7 @@ typedef struct {
 	unsigned char rev[4];		/* product revision */
 	/* these are first 36 bytes of inquiry data */
 	/* the following bytes are vendor specific and reserved bytes */
-} __attribute__((packed)) scsi_inquire_data_t;
+} scsi_inquire_data_t;
 
 /*--- Variables ---*/
 
