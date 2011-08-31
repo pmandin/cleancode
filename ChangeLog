@@ -1,3 +1,11 @@
+- 0.33:
+	Remove __attribute__((packed)) when useless.
+	Remove cookies defined in mintlib.
+	Remove include files defined in mintlib.
+
+- 0.32:
+	Fixes for Coldfire.
+
 - 0.31:
 	CD-ROM: Display Gemdos device letter for a Metados device.
 	Vdi: BORDER was already used in VDI header files.
