@@ -40,12 +40,12 @@
 typedef struct {
 	unsigned long high;
 	unsigned long low;
-} __attribute__((packed)) scsi_long64_t, scsi_ulong64_t;
+} scsi_long64_t, scsi_ulong64_t;
 
 typedef struct {
 	unsigned long bus_ids;
 	unsigned char reserved[28];
-} __attribute__((packed)) scsi_private_t;
+} scsi_private_t;
 
 typedef struct {
 	scsi_private_t private;
@@ -53,12 +53,12 @@ typedef struct {
 	unsigned short busno;
 	unsigned short features;
 	unsigned long maxlen;
-} __attribute__((packed)) scsi_businfo_t;
+} scsi_businfo_t;
 
 typedef struct {
 	unsigned char private[32];
 	scsi_long64_t scsi_id;
-} __attribute__((packed)) scsi_devinfo_t;
+} scsi_devinfo_t;
 
 typedef struct {
 	short *handle;				/* Handle of SCSIdrv device */
@@ -69,7 +69,7 @@ typedef struct {
 	unsigned char *sensebuffer;	/* Pointer to 18bytes buffer */
 	unsigned long timeout;		/* in 200Hz tics */
 	unsigned short flags;
-} __attribute__((packed)) scsi_cmd_t;
+} scsi_cmd_t;
 
 typedef struct {
 	void *next;
@@ -82,7 +82,7 @@ typedef struct {
 	void (*tpmism)(short bus);
 	void (*tbloss)(short bus);
 	void (*tunknownint)(short bus);
-} __attribute__((packed)) scsi_targethandler_t;
+} scsi_targethandler_t;
 
 /*--- Functions prototypes ---*/
 
