@@ -47,20 +47,25 @@ struct ACIA_INTERFACE {
 #define ACIA_SR_PARITYERR	0x06	/* Parity error */
 #define ACIA_SR_INTERRUPT	0x07	/* Interrupt source */
 
+/*--- Functions prototypes ---*/
+
+void ikbdPoll(void);
+
 /*--- Functions ---*/
 
 int main(int argc, char **argv)
 {
-	void *oldstack;
+	Supexec(ikbdPoll);
+}
+
+/* Functions called in supervisor mode */
+
+void ikbdPoll(void)
+{
 	unsigned char scancode;
 
-	/* Availability: all Atari machines, Hades, Medusa */
-
-	/* Go to supervisor */
-	oldstack=(void *)Super(NULL);
-
 	/* We do not change the IKBD setup, which is report
-     * relative mouse motion, and joystick on port 1
+	 * relative mouse motion, and joystick on port 1
 	 */
 
 	/* Wait till ESC key pressed */
@@ -81,7 +86,4 @@ int main(int argc, char **argv)
 
 		printf("Scancode=0x%02x\n", scancode);
 	}
-
-	/* Go back to user mode */
-	Super(oldstack);
 }
