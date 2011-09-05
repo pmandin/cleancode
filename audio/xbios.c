@@ -96,6 +96,7 @@ unsigned long cookie_gsxb;
 unsigned long cookie_stfa;
 
 int CalibDone_gsxb;
+unsigned long CurSystemTic;
 
 void (*DisplayInfos)(void);
 
@@ -250,11 +251,17 @@ void CalibInterrupt_gsxb(void)
 	}
 }
 
+void Read200HZCounter(void)
+{
+	/* We are in supervisor mode here */
+
+	CurSystemTic=*((volatile long *)_hz_200);
+}
+
 unsigned long CalibrateExternalClock(int check_dsp)
 {
 	char *buffer;
-	unsigned long CurSystemTic, LengthTic1, LengthTic2;
-	void *oldstack;
+	unsigned long  LengthTic1, LengthTic2;
 	unsigned long masterclock;
 	int CalibDonePrev_gsxb;
 
@@ -319,9 +326,7 @@ unsigned long CalibrateExternalClock(int check_dsp)
 	}
 
 	CalibDone=0;
-	oldstack=(void *)Super(0);
-	CurSystemTic=*((volatile long *)_hz_200);
-	Super(oldstack);
+	Supexec(Read200HZCounter);
 
 	/* Play the sample */
 	fprintf(output_handle, "  Calibrating (duration: 1 sec)...");fflush(stdout);
