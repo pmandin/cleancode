@@ -93,6 +93,8 @@ hardware_t hardware_ct60[]={
 void DemoLoop(void);
 void DemoHwLoop(void);
 
+void detectHardware(void);
+
 /*--- Functions ---*/
 
 int main(int argc, char **argv)
@@ -205,23 +207,10 @@ void DemoLoop(void)
 void DemoHwLoop(void)
 {
 	unsigned char *fpu_type;
-	void *oldpile;
 	hardware_t *curhw;
 	unsigned long cookie_ct60;
 
-	/* Do hardware detection */
-	oldpile=(void *)Super(NULL);
-
-	HW_Detect(cookie_cpu<=60 ? cookie_cpu : 0);
-
-	curhw=hardware;
-	while (curhw->address != NULL) {
-		curhw->present = HW_RegDetect(hw_cpu, curhw->address);
-
-		curhw++;
-	};
-
-	Super(oldpile);
+	Supexec(detectHardware);
 
 	/* Print infos */
 
@@ -322,5 +311,21 @@ void DemoHwLoop(void)
 		case 60:
 			DisplayMmuTree040_060();
 			break;
+	}
+}
+
+/* Functions called in supervisor mode */
+
+void detectHardware(void)
+{
+	hardware_t *curhw;
+
+	HW_Detect(cookie_cpu<=60 ? cookie_cpu : 0);
+
+	curhw=hardware;
+	while (curhw->address != NULL) {
+		curhw->present = HW_RegDetect(hw_cpu, curhw->address);
+
+		curhw++;
 	}
 }
