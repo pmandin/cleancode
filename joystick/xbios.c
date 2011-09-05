@@ -37,11 +37,13 @@ _KBDVECS sys_kbdvecs;	/* Backup of system vectors */
 
 unsigned short prev_joystick;
 
+void installVectors(void);
+void uninstallVectors(void);
+
 /*--- Functions ---*/
 
 int main(int argc, char **argv)
 {
-	void *oldstack;
 	unsigned long key_pressed;
 	unsigned char scancode;
 	int i;
@@ -54,17 +56,7 @@ int main(int argc, char **argv)
 	/* Read IKBD vectors base */
 	kbdvecs=Kbdvbase();
 
-	/* Go to supervisor mode */
-	oldstack=(void *)Super(NULL);
-
-	/* Backup system vectors */
-	memcpy(&sys_kbdvecs, kbdvecs, sizeof(_KBDVECS));
-
-	/* Install our asm handler */
-	XbiosInstall(kbdvecs, XbiosJoystickVector);
-
-	/* Back to user mode */
-	Super(oldstack);
+	Supexec(installVectors);
 
 	/* Wait till ESC key pressed */
 	key_pressed = scancode = 0;
@@ -102,12 +94,22 @@ int main(int argc, char **argv)
 		}
 	}
 
-	/* Go to supervisor mode */
-	oldstack=(void *)Super(NULL);
+	Supexec(uninstallVectors);
+}
 
+/* Functions called in supervisor mode */
+
+void installVectors(void)
+{
+	/* Backup system vectors */
+	memcpy(&sys_kbdvecs, kbdvecs, sizeof(_KBDVECS));
+
+	/* Install our asm handler */
+	XbiosInstall(kbdvecs, XbiosJoystickVector);
+}
+
+void uninstallVectors(void)
+{
 	/* Reinstall system vector */
 	XbiosInstall(kbdvecs,sys_kbdvecs.joyvec);
-
-	/* Back to user mode */
-	Super(oldstack);
 }
