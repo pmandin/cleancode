@@ -53,8 +53,6 @@ int main(int argc, char **argv)
 {
 	short my_apid;
 
-	unsigned long key_pressed;
-	unsigned char scancode;
 	int dummy;
 
 	PAR_TestRedirect(argc, argv);
@@ -97,6 +95,8 @@ int main(int argc, char **argv)
 	}
 
 	VDI_CloseWorkstation(my_apid);
+
+	return 0;
 }
 
 /*--- Example drawing demo ---*/

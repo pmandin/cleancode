@@ -250,7 +250,7 @@ static void VDI_ReadEddiInfos(framebuffer_t *framebuffer)
 	unsigned long EdDI_version;
 	unsigned long cookie_EdDI;
 
-	unsigned long num_colours, num_bits, clut_type, bigendian;
+	unsigned long num_colours, num_bits, clut_type, bigendian = 0;
 
 	/* Read cookie */
 	if  (Getcookie(C_EdDI, &cookie_EdDI) == C_NOTFOUND) {
