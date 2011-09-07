@@ -6,4 +6,4 @@ libikbd_a_SOURCES = ikbd.S
 
 libmxalloc_a_SOURCES = mxalloc.c
 
-EXTRA_DIST = param.h ikbd.h endian.h mxalloc.h mfp.h
+EXTRA_DIST = param.h ikbd.h endian.h mxalloc.h

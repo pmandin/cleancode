@@ -27,7 +27,6 @@
 #include <mint/sysvars.h>
 
 #include "param.h"
-#include "mfp.h"
 #include "mxalloc.h"
 
 #include "mcsn.h"
