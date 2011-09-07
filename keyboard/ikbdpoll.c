@@ -55,6 +55,8 @@ void ikbdPoll(void);
 
 int main(int argc, char **argv)
 {
+	printf("Press ESC to quit\n");
+
 	Supexec(ikbdPoll);
 }
 
@@ -70,8 +72,6 @@ void ikbdPoll(void)
 
 	/* Wait till ESC key pressed */
 	scancode = 0;
-
-	printf("Press ESC to quit\n");
 
 	while (scancode != SCANCODE_ESC) {
 
