@@ -225,7 +225,7 @@ static scsidrv_t *cookie_scsi;
 
 long scsidrv_init(void)
 {
-	if (Getcookie(C_SCSI, (unsigned long *)&cookie_scsi) != C_FOUND) {
+	if (Getcookie(C_SCSI, (long *)&cookie_scsi) != C_FOUND) {
 		return -ENOSYS;
 	}
 

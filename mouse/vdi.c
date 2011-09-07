@@ -125,4 +125,6 @@ int main(int argc, char **argv)
 	} else {
 		v_clsvwk(vdi_handle);
 	}
+
+	return 0;
 }

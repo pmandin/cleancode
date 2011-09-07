@@ -119,7 +119,7 @@ int main(int argc, char **argv)
 	unsigned long key_pressed;
 	unsigned char scancode;
 
-	unsigned long cookie_dummy;
+	long cookie_dummy;
 
 	PAR_TestRedirect(argc, argv);
 	if (output_to_file) {

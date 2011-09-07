@@ -40,7 +40,7 @@
 
 typedef struct {
 	void *address;
-	unsigned char *name;
+	char *name;
 	int present;
 } hardware_t;
 
@@ -210,7 +210,7 @@ void DemoHwLoop(void)
 {
 	unsigned char *fpu_type;
 	hardware_t *curhw;
-	unsigned long cookie_ct60;
+	long cookie_ct60;
 
 	Supexec(detectHardware);
 
