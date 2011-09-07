@@ -28,20 +28,24 @@
 #include "nova.h"
 #include "param.h"
 
+/*--- Variables ---*/
+
+static char bootdrive;
+
+/*--- Functions prototypes ---*/
+
+static void readBootDrive(void);
+
 /*--- Functions ---*/
 
 nova_resolution_t *nova_LoadModes(int *num_modes)
 {
-	unsigned char filename[32];
-	unsigned char bootdrive;
-	void *oldstack;
+	char filename[32];
 	int handle, length;
 	nova_resolution_t *buffer;
 
 	/* Find boot drive */
-	oldstack = (void *)Super(NULL);
-	bootdrive='A'+ *((volatile unsigned short *)_bootdev);
-	Super(oldstack);
+	Supexec(readBootDrive);
 
 	sprintf(&filename[0], "%c:\\auto\\sta_vdi.bib", bootdrive);
 
@@ -69,4 +73,11 @@ nova_resolution_t *nova_LoadModes(int *num_modes)
 	}
 
 	return buffer;
+}
+
+/* Functions called in supervisor mode */
+
+static void readBootDrive(void)
+{
+	bootdrive='A'+ *((volatile unsigned short *)_bootdev);
 }
