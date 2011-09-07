@@ -35,7 +35,7 @@
 
 /*--- Variables ---*/
 
-unsigned long cookie_rsvf;
+long cookie_rsvf;
 
 /*--- Functions prototypes ---*/
 
@@ -70,6 +70,8 @@ int main(int argc, char **argv)
 	} else {
 		fclose(output_handle);
 	}
+
+	return 0;
 }
 
 void DemoLoop(void)

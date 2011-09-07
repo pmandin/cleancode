@@ -20,6 +20,9 @@
 
 #include <stdio.h>
 #include <string.h>
+#include <fcntl.h>
+#include <unistd.h>
+#include <sys/ioctl.h>
 
 #include <mint/osbind.h>
 #include <mint/cdromio.h>
@@ -66,6 +69,8 @@ int main(int argc, char **argv)
 	} else {
 		fclose(output_handle);
 	}
+
+	return 0;
 }
 
 void ListCdromInfo(char *device)

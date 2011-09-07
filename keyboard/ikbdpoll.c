@@ -58,6 +58,8 @@ int main(int argc, char **argv)
 	printf("Press ESC to quit\n");
 
 	Supexec(ikbdPoll);
+
+	return 0;
 }
 
 /* Functions called in supervisor mode */

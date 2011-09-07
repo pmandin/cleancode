@@ -350,7 +350,7 @@ __extension__	\
 
 /*--- Variables ---*/
 
-static unsigned long cookie_xhdi;
+static long cookie_xhdi;
 static void *oldstack;
 
 /*--- Functions prototypes ---*/

@@ -698,7 +698,7 @@ static long pcibios_phys_to_virt(void *phys_cpu_address, void *data)
 long pcibios_init(void)
 {
 	/* Check _PCI cookie */
-	if (Getcookie(C__PCI, (unsigned long *)&cookie_pci) != C_FOUND) {
+	if (Getcookie(C__PCI, (long *)&cookie_pci) != C_FOUND) {
 		return PCI_FUNC_NOT_SUPPORTED;
 	}
 

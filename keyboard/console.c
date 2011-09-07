@@ -20,6 +20,8 @@
 
 #include <stdio.h>
 #include <string.h>
+#include <fcntl.h>
+#include <unistd.h>
 
 /*--- Defines ---*/
 
@@ -38,6 +40,7 @@ int main(int argc, char **argv)
 	handle = open(DEVICE_NAME, 0);
 	if (handle<0) {
 		printf("Can not open " DEVICE_NAME "\n");
+		return 1;
 	}
 
 	/* Loop */
@@ -56,4 +59,6 @@ int main(int argc, char **argv)
 
 	/* Close device */
 	close(handle);
+
+	return 0;
 }

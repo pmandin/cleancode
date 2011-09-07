@@ -69,4 +69,6 @@ int main(int argc, char **argv)
 
 	/* Uninstall our asm handler */
 	Supexec(IkbdUninstall);
+
+	return 0;
 }

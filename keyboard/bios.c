@@ -61,4 +61,6 @@ int main(int argc, char **argv)
 		specialkeys = Kbshift(-1) & 0xff;
 		printf(" Kbshift() special keys=0x%02x\n",specialkeys);
 	}
+
+	return 0;
 }

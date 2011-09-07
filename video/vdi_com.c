@@ -248,7 +248,7 @@ void VDI_ReadInfos(framebuffer_t *framebuffer)
 static void VDI_ReadEddiInfos(framebuffer_t *framebuffer)
 {
 	unsigned long EdDI_version;
-	unsigned long cookie_EdDI;
+	long cookie_EdDI;
 
 	unsigned long num_colours, num_bits, clut_type, bigendian = 0;
 

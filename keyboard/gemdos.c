@@ -57,4 +57,6 @@ int main(int argc, char **argv)
 		printf("Ascii code=0x%02x, scancode=0x%02x, special keys=0x%02x\n",
 			asciicode, scancode, specialkeys);
 	}
+
+	return 0;
 }

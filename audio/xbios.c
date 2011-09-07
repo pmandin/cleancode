@@ -88,12 +88,12 @@ typedef struct {
 
 /*--- Variables ---*/
 
-unsigned long cookie_mch;
-unsigned long cookie_snd;
-unsigned long cookie_mcsn;
-unsigned long cookie_mgsn;
-unsigned long cookie_gsxb;
-unsigned long cookie_stfa;
+long cookie_mch;
+long cookie_snd;
+long cookie_mcsn;
+long cookie_mgsn;
+long cookie_gsxb;
+long cookie_stfa;
 
 int CalibDone_gsxb;
 unsigned long CurSystemTic;
@@ -238,6 +238,8 @@ int main(int argc, char **argv)
 	} else {
 		fclose(output_handle);
 	}
+
+	return 0;
 }
 
 /* Count 100 interrupts */

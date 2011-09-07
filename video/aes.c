@@ -85,12 +85,12 @@ int main(int argc, char **argv)
 
 	if (appl_init() == -1) {
 		fprintf(stderr, "Can not open AES\n");
-		exit(1);
+		return 1;
 	}
 
 	if (VDI_OpenWorkstation(gl_apid)== -1) {
 		appl_exit();
-		exit(1);
+		return 1;
 	}
 
 	VDI_ReadInfos(&vdifb);
@@ -107,7 +107,7 @@ int main(int argc, char **argv)
 			printf("Can not create window\n");
 			appl_exit();
 			VDI_CloseWorkstation(gl_apid);
-			exit(1);
+			return 1;
 		}
 
 		VDI_SavePalette(&vdifb);
@@ -127,8 +127,9 @@ int main(int argc, char **argv)
 	}
 
 	appl_exit();
-
 	VDI_CloseWorkstation(gl_apid);
+
+	return 0;
 }
 
 int CreateWindow(void)

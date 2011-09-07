@@ -49,7 +49,7 @@ void DemoLoop(void);
 
 int main(int argc, char **argv)
 {
-	unsigned long cookie_scsi;
+	long cookie_scsi;
 
 	PAR_TestRedirect(argc, argv);
 	if (output_to_file) {
@@ -71,6 +71,8 @@ int main(int argc, char **argv)
 	} else {
 		fclose(output_handle);
 	}
+
+	return 0;
 }
 
 /*--- Little demo loop ---*/

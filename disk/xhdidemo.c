@@ -33,7 +33,7 @@
 
 /*--- Variables ---*/
 
-unsigned long cookie_xhdi;
+long cookie_xhdi;
 
 /*--- Functions prototypes ---*/
 
@@ -185,6 +185,8 @@ int main(int argc, char **argv)
 	} else {
 		fclose(output_handle);
 	}
+
+	return 0;
 }
 
 /*--- Little demo loop ---*/

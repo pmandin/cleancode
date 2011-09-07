@@ -86,7 +86,7 @@ __extension__	\
 
 /*--- Variables ---*/
 
-static unsigned long cookie_xpci;
+static long cookie_xpci;
 
 /*--- Functions prototypes ---*/
 
@@ -312,7 +312,7 @@ static long xpci_phys_to_virt(void *phys_cpu_address, void *data)
 long xpci_init(void)
 {
 	/* Check XPCI cookie */
-	if (Getcookie(C_XPCI, (unsigned long *)&cookie_xpci) != C_FOUND) {
+	if (Getcookie(C_XPCI, (long *)&cookie_xpci) != C_FOUND) {
 		return PCI_FUNC_NOT_SUPPORTED;
 	}
 

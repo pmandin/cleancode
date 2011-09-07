@@ -46,7 +46,7 @@ typedef struct {
 
 /*--- Variables ---*/
 
-unsigned long cookie_cpu, cookie_fpu;
+long cookie_cpu, cookie_fpu;
 
 hardware_t hardware[]={
 	HW_INIT(0xfff00000, "Falcon: IDE controller"),
@@ -181,6 +181,8 @@ int main(int argc, char **argv)
 	} else {
 		fclose(output_handle);
 	}
+
+	return 0;
 }
 
 void DemoLoop(void)

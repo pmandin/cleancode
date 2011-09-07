@@ -67,8 +67,7 @@ void dump_card_bios(long device_handle, unsigned long bar_ptr);
 
 int main(int argc, char **argv)
 {
-	unsigned long cookie_pci;
-	unsigned long cookie_xpci;
+	long cookie_pci, cookie_xpci;
 
 	PAR_TestRedirect(argc, argv);
 	if (output_to_file) {
@@ -102,6 +101,8 @@ int main(int argc, char **argv)
 	} else {
 		fclose(output_handle);
 	}
+
+	return 0;
 }
 
 void DemoPciLoop(void)

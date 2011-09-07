@@ -77,6 +77,8 @@ int main(int argc, char **argv)
 	} else {
 		fclose(output_handle);
 	}
+
+	return 0;
 }
 
 void ListMetadosDrives(metainit_t *metainit)

@@ -148,6 +148,8 @@ int main(int argc, char **argv)
 	DestroyWindow();
 	appl_exit();
 	CloseWorkstation();
+
+	return 0;
 }
 
 int OpenWorkstation(void)

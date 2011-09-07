@@ -76,4 +76,6 @@ int main(int argc, char **argv)
 
 	/* Close AES */
 	appl_exit();
+
+	return 0;
 }

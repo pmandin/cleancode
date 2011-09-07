@@ -46,7 +46,6 @@ int main(int argc, char **argv)
 {
 	unsigned long key_pressed;
 	unsigned char scancode;
-	int i;
 
 	/* Availability: all systems */
 
@@ -95,6 +94,8 @@ int main(int argc, char **argv)
 	}
 
 	Supexec(uninstallVectors);
+
+	return 0;
 }
 
 /* Functions called in supervisor mode */

@@ -206,12 +206,11 @@ void UpdateJoypads(void);
 
 int main(int argc, char **argv)
 {
-	void *oldstack;
 	unsigned long key_pressed;
 	unsigned char scancode;
 	int i;
 
-	unsigned long cookie_mch;
+	long cookie_mch;
 
 	/* Availability: STE, Falcon */
 	if (Getcookie(C__MCH, &cookie_mch) != C_FOUND) {
@@ -263,6 +262,8 @@ int main(int argc, char **argv)
 		DisplayLogicalValues();
 /*		DisplayRawValues();*/
 	}
+
+	return 0;
 }
 
 /* Detect Teamtap */

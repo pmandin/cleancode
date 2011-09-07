@@ -37,8 +37,6 @@ unsigned short prev_joystick;
 
 int main(int argc, char **argv)
 {
-	int i;
-
 	/* Availability: all Atari machines, Hades, Medusa */
 
 	/* We do not change the IKBD setup, which is report
@@ -82,4 +80,6 @@ int main(int argc, char **argv)
 
 	/* Uninstall our asm handler */
 	Supexec(IkbdUninstall);
+
+	return 0;
 }
