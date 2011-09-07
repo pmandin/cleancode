@@ -43,6 +43,7 @@ typedef struct {
 
 /*--- Functions prototypes ---*/
 
+long VDLY_Init(void);
 void VDLY_ReadModes(vdly_modeinfo_t *vdly_modeinfo);
 void VDLY_AddMode(unsigned short modecode, void *vid_registers);
 long VDLY_GetMode(unsigned short modecode,void *vid_registers);

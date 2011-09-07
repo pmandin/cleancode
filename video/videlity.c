@@ -112,7 +112,7 @@ __extension__	\
 
 long VDLY_Init(void)
 {
-	if (Getcookie(C_VDLY, (unsigned long *)&cookie_vdly) != C_FOUND) {
+	if (Getcookie(C_VDLY, (long *)&cookie_vdly) != C_FOUND) {
 		return -ENOSYS;
 	}
 

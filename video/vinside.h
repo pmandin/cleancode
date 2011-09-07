@@ -42,7 +42,7 @@ typedef struct {
 /* VI2.DAT file definition */
 
 typedef struct {
-	unsigned char	name[8];	/* "DATFILE\0" */
+	char	name[8];		/* "DATFILE\0" */
 	unsigned short	version;	/* 0x0103 */
 
 	unsigned short	freqh_mini;	/* Freq limits for a multisync monitor */

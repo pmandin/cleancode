@@ -125,7 +125,7 @@ __extension__	\
 
 long SB2_Init(void)
 {
-	if (Getcookie(C_OSBL, (unsigned long *)&cookie_osbl) != C_FOUND) {
+	if (Getcookie(C_OSBL, (long *)&cookie_osbl) != C_FOUND) {
 		return -ENOSYS;
 	}
 

@@ -21,6 +21,7 @@
 #include <stdlib.h>
 #include <fcntl.h>
 #include <unistd.h>
+#include <string.h>
 
 #include <mint/osbind.h>
 #include <mint/sysvars.h>
@@ -37,21 +38,24 @@ const vi_limits_t vi_limits[4]={
 	{15000,16000, 475,610},	/* TV monitor */
 };
 
+/*--- Variables ---*/
+
+static char bootdrive;
+
+/*--- Functions prototypes ---*/
+
+static void readBootDrive(void);
+
 /*--- Functions ---*/
 
 vi_header_t *VI_LoadModes(void)
 {
-	unsigned char filename[16];
-	unsigned char bootdrive;
+	char filename[16];
 	int handle, length;
 	vi_header_t *buffer;
-	void *oldpile;
-	unsigned char id[8];
 
 	/* Find boot drive */
-	oldpile = (void *)Super(NULL);
-	bootdrive='A'+ *((volatile unsigned short *)_bootdev);
-	Super(oldpile);
+	Supexec(readBootDrive);
 
 	sprintf(&filename[0], "%c%s", bootdrive, ":\\vi2.dat");
 
@@ -86,4 +90,11 @@ vi_header_t *VI_LoadModes(void)
 	}
 
 	return buffer;
+}
+
+/* Functions called in supervisor mode */
+
+static void readBootDrive(void)
+{
+	bootdrive='A'+ *((volatile unsigned short *)_bootdev);
 }

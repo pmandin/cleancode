@@ -53,7 +53,7 @@ static void VDI_ReadEddiInfos(framebuffer_t *framebuffer);
 int VDI_OpenWorkstation(int apid)
 {
 	int i;
-	unsigned short dummy;
+	short dummy;
 
 	/* Init VDI workstation */
 	vdi_workin[0]=Getrez()+2;

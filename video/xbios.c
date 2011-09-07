@@ -81,22 +81,22 @@ enum {
 
 /*--- Variables ---*/
 
-unsigned long cookie_vdo;
-unsigned long cookie_mil;
-unsigned long cookie_vdi;
-unsigned long cookie_blow;
-unsigned long cookie_cnts;
-unsigned long cookie_hade;
-unsigned long cookie_nova;
-unsigned long cookie_scpn;
-unsigned long cookie_vi2;
-unsigned long cookie_imne;
-unsigned long cookie_osbl;
-unsigned long cookie_vscr;
-unsigned long cookie_vdly;
+long cookie_vdo;
+long cookie_mil;
+long cookie_vdi;
+long cookie_blow;
+long cookie_cnts;
+long cookie_hade;
+long cookie_nova;
+long cookie_scpn;
+long cookie_vi2;
+long cookie_imne;
+long cookie_osbl;
+long cookie_vscr;
+long cookie_vdly;
 #if 0
-unsigned long cookie_ostt;
-unsigned long cookie_over;
+long cookie_ostt;
+long cookie_over;
 #endif
 
 int plugged_monitor;
@@ -138,7 +138,7 @@ void CountBppModes(void);
 void DisplayBppModes(int bpp, int spec_bpp);
 
 void DrawDemoLoop(void);
-void PrintCookie(char *text, unsigned long cookiename, unsigned long *cookievalue_p);
+void PrintCookie(char *text, unsigned long cookiename, long *cookievalue_p);
 
 /*--- Functions ---*/
 
@@ -194,9 +194,11 @@ int main(int argc, char **argv)
 	} else {
 		fclose(output_handle);
 	}
+
+	return 0;
 }
 
-void PrintCookie(char *text, unsigned long cookiename, unsigned long *cookievalue_p)
+void PrintCookie(char *text, unsigned long cookiename, long *cookievalue_p)
 {
 	if (Getcookie(cookiename, cookievalue_p) != C_FOUND) {
 		*cookievalue_p = 0;

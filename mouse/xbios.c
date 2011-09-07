@@ -99,6 +99,8 @@ int main(int argc, char **argv)
 	}
 
 	Supexec(uninstallVectors);
+
+	return 0;
 }
 
 /* Functions called in supervisor mode */
