@@ -34,10 +34,10 @@
 short work_in[12], work_out[272];
 short vdihandle;
 int vdiwidth, vdiheight, vdibpp;
-unsigned short deskx, desky, deskw, deskh;
+short deskx, desky, deskw, deskh;
 int winhandle;
 
-unsigned char *GEM_title_name="AES test";
+char *GEM_title_name="AES test";
 
 /*--- Functions prototypes ---*/
 
@@ -53,9 +53,9 @@ int main(int argc, char **argv)
 {
 	int i, quit;
 
-	unsigned short prev_mousex, prev_mousey, prev_mouseb;
-	unsigned short Aes_mousex, Aes_mousey, Aes_mouseb, kstate;
-	unsigned short dummy;
+	short prev_mousex, prev_mousey, prev_mouseb;
+	short Aes_mousex, Aes_mousey, Aes_mouseb;
+	short dummy;
 
 	short apid;
 
@@ -154,7 +154,7 @@ int main(int argc, char **argv)
 
 int OpenWorkstation(void)
 {
-	unsigned short dummy;
+	short dummy;
 	int i;
 
 	/* Ask VDI physical workstation handle opened by AES */

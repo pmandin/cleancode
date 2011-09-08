@@ -102,4 +102,5 @@ int main(int argc, char **argv)
 	}
 
 	appl_exit();
+	return 0;
 }

@@ -217,7 +217,7 @@ void VDI_ReadInfos(framebuffer_t *framebuffer)
 
 	/* Display our infos */
 	fprintf(output_handle, "Final workstation informations:\n");
-	fprintf(output_handle, " Address=0x%08x,",framebuffer->buffer);
+	fprintf(output_handle, " Address=0x%p,",framebuffer->buffer);
 	fprintf(output_handle, " Pitch=%d,",framebuffer->pitch);
 	fprintf(output_handle, " Format=");
 	switch (framebuffer->format) {
@@ -293,7 +293,7 @@ static void VDI_ReadEddiInfos(framebuffer_t *framebuffer)
 		fprintf(output_handle, "EdDI 1.1 screen format: 0x%04x\n",vdi_workout[14]);
 
 		framebuffer->buffer = (void *) *((unsigned long *) &vdi_workout[6]);
-		fprintf(output_handle, " Address=0x%08x,", framebuffer->buffer);
+		fprintf(output_handle, " Address=0x%p,", framebuffer->buffer);
 		framebuffer->pitch = vdi_workout[5];
 		fprintf(output_handle, " Pitch=%d\n", framebuffer->pitch);
 
@@ -412,7 +412,7 @@ static void VDI_ReadEddiInfos(framebuffer_t *framebuffer)
 				int num_bit;
 				unsigned short *tmp_p;
 				unsigned long new_amask, new_gmask, new_rmask, new_bmask;
-				unsigned char *component_name[5]={"red","green","blue","alpha","overlay"};
+				char *component_name[5]={"red","green","blue","alpha","overlay"};
 
 				new_amask = new_rmask = new_gmask = new_bmask = 0;
 
