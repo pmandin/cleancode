@@ -95,7 +95,7 @@ long cookie_gsxb;
 long cookie_stfa;
 
 int CalibDone_gsxb;
-unsigned long CurSystemTic;
+long CurSystemTic;
 
 void (*DisplayInfos)(void);
 
@@ -109,7 +109,7 @@ void DisplayInfosGSXB(void);
 void DisplayInfosXsound(void);
 
 void CalibInterrupt_gsxb(void);
-unsigned long CalibrateExternalClock(int check_dsp);
+long CalibrateExternalClock(int check_dsp);
 
 /*--- Functions ---*/
 
@@ -259,11 +259,11 @@ void Read200HZCounter(void)
 	CurSystemTic=*((volatile long *)_hz_200);
 }
 
-unsigned long CalibrateExternalClock(int check_dsp)
+long CalibrateExternalClock(int check_dsp)
 {
 	char *buffer;
-	unsigned long  LengthTic1, LengthTic2;
-	unsigned long masterclock;
+	long LengthTic1, LengthTic2;
+	long masterclock;
 	int CalibDonePrev_gsxb;
 
 	fprintf(output_handle, " Calibration of external clock\n");
@@ -367,8 +367,8 @@ unsigned long CalibrateExternalClock(int check_dsp)
 
 void DisplayInfos_SND(void)
 {
-	unsigned long masterclock;
-	unsigned long masterclock_prediv;
+	long masterclock;
+	long masterclock_prediv;
 	int i, curfreq;
 	
 	fprintf(output_handle, "\nStandard driver\n");

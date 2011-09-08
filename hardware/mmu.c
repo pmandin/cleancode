@@ -79,7 +79,7 @@ static void printRp030(unsigned long rp0, unsigned long rp1)
 	fprintf(output_handle, "  limit direction: %s\n", (rp0 & (1<<31)) ? "up" : "down");
 	fprintf(output_handle, "  limit: %d\n", (rp0>>16)&0x7fff);
 	fprintf(output_handle, "  dt: %d (%s)\n", rp0 & 3, descriptorType030[rp0 & 3]);
-	fprintf(output_handle, "  base address: 0x%08\n", rp1 & 0xfffffff0UL);
+	fprintf(output_handle, "  base address: 0x%08x\n", rp1 & 0xfffffff0UL);
 }
 
 static void printTc030(void)
@@ -138,6 +138,11 @@ static void printTc040(void)
 	fprintf(output_handle, "  default write protect (data cache): %s\n", (hw_mmu_tcr & (1<<5)) ? "read only" : "read/write");
 	fprintf(output_handle, "  default cache mode (inst cache): %s\n", defaultCacheMode040[(hw_mmu_tcr>>3)&3]);
 	fprintf(output_handle, "  default upa bits (inst cache): %d\n", (hw_mmu_tcr>>1)&3);
+}
+
+static void printRp040(unsigned long rp)
+{
+	/* TODO */
 }
 
 static void printTtr040(unsigned long ttr)

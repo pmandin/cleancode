@@ -686,7 +686,7 @@ void BuildModesListF30ScreenBlaster2(void)
 	unsigned long errorcode;
 	sblast2_mode_t	*first, *current, *curmode;
 	sblast2_header_t *header;
-	sblast2_name_t	*mon_names;
+/*	sblast2_name_t	*mon_names;*/
 	int i, width, height, bpp, monitor;
 	unsigned long mon_suitable;
 
@@ -1079,7 +1079,7 @@ framebuffer_t *AddMode(unsigned short width, unsigned short height, unsigned sho
 void CountBppModes(void)
 {
 	framebuffer_t *curmode;	
-	int i, spec_bpp;
+	int i, spec_bpp = 0;
 	
 	memset(num_bpp_modes, 0, sizeof(num_bpp_modes));
 

@@ -115,6 +115,7 @@ long pci_read_config(unsigned long device_handle, pci_config_t *device_config)
 	return 0x80;
 }
 
+#if 0
 static unsigned long pci_size(unsigned long base, unsigned long mask)
 {
 	unsigned long size;
@@ -123,6 +124,7 @@ static unsigned long pci_size(unsigned long base, unsigned long mask)
 	size = size & ~(size-1);	/* Get the lowest of them to find the decode size */
 	return size-1;			/* extent = size - 1 */
 }
+#endif
 
 unsigned long pci_read_mem_size(unsigned long device_handle, int config_register)
 {
