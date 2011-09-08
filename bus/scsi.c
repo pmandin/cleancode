@@ -506,7 +506,6 @@ long scsi_ModeSelect10(scsi_device_t *dev, void *data, unsigned short length, in
 {
 	scsi_cmd_t	cmd;
 	scsi_cmd10_t	cmd10;
-	unsigned long	numblock;
 
 	scsi_initcmd10(&cmd10, SCSI_CMD_MODESELECT10, dev->lun, 0, length, dev->control);
 	cmd10.lun |= (pf & 1)<<4;
@@ -537,7 +536,7 @@ long scsi_ModeSense10(scsi_device_t *dev, void *data, unsigned short length, int
 	scsi_cmd10_t	cmd10;
 	unsigned long	numblock;
 
-	numblock |= (pc & 3)<<30;
+	numblock = (pc & 3)<<30;
 	numblock |= (pagecode & ((1<<6)-1))<<24;
 
 	scsi_initcmd10(&cmd10, SCSI_CMD_MODESENSE10, dev->lun, numblock, length, dev->control);

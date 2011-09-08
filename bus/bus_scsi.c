@@ -193,9 +193,7 @@ void PrintDeviceInfo(unsigned short busno, scsi_long64_t *scsi_id)
 	scsi_device_t device;
 	scsi_inquire_data_t inqdata;
 	char *devtype_name;
-	int i, names_found;
-	char vendorname[64];
-	char productname[64];
+	int i;
 
 	result=scsidrv_open(busno, scsi_id, &(device.maxlen));
 	if (result<0) {

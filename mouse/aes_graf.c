@@ -37,8 +37,8 @@ int main(int argc, char **argv)
 	unsigned long key_pressed;
 	unsigned char scancode;
 
-	unsigned short prev_mousex, prev_mousey, prev_mouseb, prev_kstate;
-	unsigned short Aes_mousex, Aes_mousey, Aes_mouseb, kstate;
+	short prev_mousex, prev_mousey, prev_mouseb, prev_kstate;
+	short Aes_mousex, Aes_mousey, Aes_mouseb, kstate;
 
 	short apid;
 

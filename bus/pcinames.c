@@ -251,7 +251,7 @@ int pci_device_getname(
 )
 {
 	char *buffer;
-	int length, maxlen, vendor_position, device_position;
+	int length, vendor_position, device_position;
 	int src_pos,dst_pos;
 
 	buffer = load_ids(PCI_IDS_FILE, &length);
@@ -531,7 +531,7 @@ int pci_class_getname(
 {
 	char *buffer;
 	int length;
-	int maxlen, class_position, subclass_position, progif_position;
+	int class_position, subclass_position, progif_position;
 	int src_pos,dst_pos;
 
 	buffer = load_ids(PCI_IDS_FILE, &length);
@@ -704,7 +704,7 @@ int pci_subdevice_getname(
 )
 {
 	char *buffer;
-	int length, maxlen, vendor_position, device_position;
+	int length, vendor_position, device_position;
 	int subvendor_position, subdevice_position;
 	int src_pos,dst_pos;
 

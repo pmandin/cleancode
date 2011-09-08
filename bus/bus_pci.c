@@ -108,11 +108,9 @@ int main(int argc, char **argv)
 void DemoPciLoop(void)
 {
 	int num_device;
-	int class_device, subclass_device;
 	long machineid, device_handle;
 	pci_config_t device_config;
 	long classcode;
-	char **pci_subclass_devices;
 	unsigned short vendor_id, device_id, command, status;
 	unsigned short subvendor_id, subdevice_id;
 	unsigned long address;
