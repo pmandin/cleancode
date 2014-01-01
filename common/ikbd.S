@@ -140,8 +140,6 @@ _IkbdInstall:
 
 	movew	#0x2300,sr
 
-	clrl	_Ikbd_packets
-
 	RESTORESTACK_D0D1A0A1
 	rts
 
