@@ -29,15 +29,82 @@
 	.globl	_Ikbd_mousey
 	.globl	_Ikbd_joystick
 
+/*--- Coldfire/m68k macros ---*/
+
+#if defined(__mcoldfire__)
+
+# define SAVESTACK_D0D1A0A1	\
+	lea	sp@(-16),sp;	\
+	moveml	d0-d1/a0-a1,sp@
+
+# define RESTORESTACK_D0D1A0A1	\
+	moveml	sp@,d0-d1/a0-a1;	\
+	lea	sp@(16),sp
+
+# define SAVESTACK_D0D1A0	\
+	lea	sp@(-12),sp;	\
+	moveml	d0-d1/a0,sp@
+
+# define RESTORESTACK_D0D1A0	\
+	moveml	sp@,d0-d1/a0;	\
+	lea	sp@(12),sp
+
+# define MOVEL_REG(reg,src,dst)	\
+	movel	src,reg;	\
+	movel	reg,dst
+
+# define MOVEB_REG(reg,src,dst)	\
+	moveb	src,reg;	\
+	moveb	reg,dst
+
+# define BTST_REG(reg,num,addr)	\
+	moveql	num,reg;	\
+	btst	reg,addr
+
+# define BCLR_REG(reg,num,addr)	\
+	moveql	num,reg;	\
+	bclr	reg,addr
+
+# define ADDW_REG(reg,src,dst)	\
+	movew	dst,reg;	\
+	addl	src,reg;	\
+	movew	reg,dst
+	
+#else
+
+# define SAVESTACK_D0D1A0A1	\
+	moveml	d0-d1/a0-a1,sp@-
+
+# define RESTORESTACK_D0D1A0A1	\
+	moveml	sp@+,d0-d1/a0-a1
+
+# define SAVESTACK_D0D1A0	\
+	moveml	d0-d1/a0,sp@-
+
+# define RESTORESTACK_D0D1A0	\
+	moveml	sp@+,d0-d1/a0
+
+# define MOVEL_REG(reg,src,dst)	\
+	movel	src,dst
+
+# define MOVEB_REG(reg,src,dst)	\
+	moveb	src,dst
+
+# define BTST_REG(reg,num,addr)	\
+	btst	num,addr
+
+# define BCLR_REG(reg,num,addr)	\
+	bclr	num,addr
+
+# define ADDW_REG(reg,src,dst)	\
+	addw	src,dst
+
+#endif
+
 /*--- Install our IKBD vector ---*/
 
 _IkbdInstall:
-#if defined(__mcoldfire__)
-	lea	sp@(-16),sp
-	moveml	d0-d1/a0-a1,sp@
-#else
-	moveml	d0-d1/a0-a1,sp@-
-#endif
+	SAVESTACK_D0D1A0A1
 
 	| Disable all interrupts
 
@@ -47,58 +114,35 @@ _IkbdInstall:
 
 	lea	0xfffffa00:w,a0
 	btst	#6,a0@(0x09)
-#if defined(__mcoldfire__)
 	sne	d0
 	move.b	d0,ikbd_ierb
-#else
-	sne	ikbd_ierb
-#endif
+
 	btst	#6,a0@(0x15)
-#if defined(__mcoldfire__)
 	sne	d0
 	move.b	d0,ikbd_imrb
-#else
-	sne	ikbd_imrb
-#endif
 
 	| Set our MFP routine
 
-#if defined(__mcoldfire__)
-	movel	0x118:w,d0
-	movel	d0,old_ikbd
-	lea	ikbd,a0
-	movel	a0,0x118:w
+	MOVEL_REG(d0,0x118:w,old_ikbd)
+	MOVEL_REG(d0,#ikbd,0x118:w)
+
 	moveq	#6,d0
 	bset	d0,0xfffffa09:w	| IERB
 	bset	d0,0xfffffa15:w	| IMRB
-#else
-	movel	0x118:w,old_ikbd
-	movel	#ikbd,0x118:w
-	bset	#6,0xfffffa09:w	| IERB
-	bset	#6,0xfffffa15:w	| IMRB
-#endif
 
 	| Set relative mouse motion mode
 	| needed because running a .tos or .ttp program
 	| disable the mouse (entering VT52 textmode)
 
-#if defined(__mcoldfire__)
-	moveq	#8,d0
-	moveb	d0,0xfffffc02.w
-#else
-	moveb	#8,0xfffffc02.w
-#endif
+	MOVEB_REG(d0,#8,0xfffffc02.w)
 
 	| Re-enable interrupts
 
 	movew	#0x2300,sr
 
-#if defined(__mcoldfire__)
-	moveml	sp@,d0-d1/a0-a1
-	lea	sp@(16),sp
-#else
-	moveml	sp@+,d0-d1/a0-a1
-#endif
+	clrl	_Ikbd_packets
+
+	RESTORESTACK_D0D1A0A1
 	rts
 
 /*--- Uninstall our IKBD vector ---*/
@@ -126,12 +170,7 @@ ikbd_restoreierb:
 	bset	#6,a0@(0x15)
 ikbd_restoreimrb:
 
-#if defined(__mcoldfire__)
-	movel	old_ikbd,a0
-	movel	a0,0x118:w
-#else
-	movel	old_ikbd,0x118:w
-#endif
+	MOVEL_REG(a0,old_ikbd,0x118:w)
 
 	| Clear keyboard buffer
 
@@ -164,20 +203,10 @@ ikbd_finbuffer:
 	.ascii	"LSDL"
 	.comm	old_ikbd,4
 ikbd:
-#if defined(__mcoldfire__)
-	lea	sp@(-12),sp
-	moveml	d0-d1/a0,sp@
-#else
-	moveml	d0-d1/a0,sp@-
-#endif
+	SAVESTACK_D0D1A0
 
 	| Check if source is IKBD or MIDI
-#if defined(__mcoldfire__)
-	moveql	#0,d0
-	btst	d0,0xfffffc00.w
-#else
-	btst	#0,0xfffffc00.w
-#endif
+	BTST_REG(d0,#0,0xfffffc00.w)
 	beqs	ikbd_oldmidi
 
 	moveb	0xfffffc02:w,d0
@@ -204,23 +233,13 @@ ikbd_yes_mouse:
 #endif
 	movew	d0,_Ikbd_mouseb
 
-#if defined(__mcoldfire__)
-	movel	#ikbd_mousex,d0
-	movel	d0,0x118:w
-#else
-	movel	#ikbd_mousex,0x118:w
-#endif
+	MOVEL_REG(d0,#ikbd_mousex,0x118:w)
 	bras	ikbd_endit_stack
 
 	| Joystick packet, byte #1
 
 ikbd_yes_joystick:
-#if defined(__mcoldfire__)
-	movel	#ikbd_joystick,d0
-	movel	d0,0x118:w
-#else
-	movel	#ikbd_joystick,0x118:w
-#endif
+	MOVEL_REG(d0,#ikbd_joystick,0x118:w)
 	bras	ikbd_endit_stack
 
 	| Keyboard press/release
@@ -242,28 +261,15 @@ ikbd_no_mouse:
 	| End of interrupt
 
 ikbd_endit_stack:
-#if defined(__mcoldfire__)
-	moveql	#6,d0
-	bclr	d0,0xfffffa11:w
+	BCLR_REG(d0,#6,0xfffffa11:w)
 
-	moveml	sp@,d0-d1/a0
-	lea	sp@(12),sp
-#else
-	moveml	sp@+,d0-d1/a0
-
-	bclr	#6,0xfffffa11:w
-#endif
+	RESTORESTACK_D0D1A0
 	rte
 
 	| Call old MIDI interrupt
 
 ikbd_oldmidi:
-#if defined(__mcoldfire__)
-	moveml	sp@,d0-d1/a0
-	lea	sp@(12),sp
-#else
-	moveml	sp@+,d0-d1/a0
-#endif
+	RESTORESTACK_D0D1A0
 
 	movel	old_ikbd,sp@-
 	rts
@@ -271,107 +277,48 @@ ikbd_oldmidi:
 	| Mouse packet, byte #2
 
 ikbd_mousex:
-#if defined(__mcoldfire__)
-	lea	sp@(-12),sp
-	moveml	d0-d1/a0,sp@
-#else
-	moveml	d0-d1/a0,sp@-
-#endif
+	SAVESTACK_D0D1A0
 
 	| Check if source is IKBD or MIDI
-#if defined(__mcoldfire__)
-	moveql	#0,d0
-	btst	d0,0xfffffc00.w
-#else
-	btst	#0,0xfffffc00.w
-#endif
+	BTST_REG(d0,#0,0xfffffc00.w)
 	beqs	ikbd_oldmidi
 
 	moveb	0xfffffc02:w,d0
 	extw	d0
-#if defined(__mcoldfire__)
-	movew	_Ikbd_mousex,d1
-	addl	d1,d0
-	movew	d0,_Ikbd_mousex
+	ADDW_REG(d1,d0,_Ikbd_mousex)
 
-	movel	#ikbd_mousey,d0
-	movel	d0,0x118:w
-#else
-	addw	d0,_Ikbd_mousex
-
-	movel	#ikbd_mousey,0x118:w
-#endif
+	MOVEL_REG(d0,#ikbd_mousey,0x118:w)
 	bras	ikbd_endit_stack
 
 	| Mouse packet, byte #3
 
 ikbd_mousey:
-#if defined(__mcoldfire__)
-	lea	sp@(-12),sp
-	moveml	d0-d1/a0,sp@
-#else
-	moveml	d0-d1/a0,sp@-
-#endif
+	SAVESTACK_D0D1A0
 
 	| Check if source is IKBD or MIDI
-#if defined(__mcoldfire__)
-	moveql	#0,d0
-	btst	d0,0xfffffc00.w
-#else
-	btst	#0,0xfffffc00.w
-#endif
+	BTST_REG(d0,#0,0xfffffc00.w)
 	beqs	ikbd_oldmidi
 
 	moveb	0xfffffc02:w,d0
 	extw	d0
-#if defined(__mcoldfire__)
-	movew	_Ikbd_mousey,d1
-	addl	d1,d0
-	movew	d0,_Ikbd_mousey
+	ADDW_REG(d1,d0,_Ikbd_mousey)
 
-	movel	#ikbd,d0
-	movel	d0,0x118:w
-#else
-	addw	d0,_Ikbd_mousey
-
-	movel	#ikbd,0x118:w
-#endif
-	bras	ikbd_endit_stack
+	MOVEL_REG(d0,#ikbd,0x118:w)
+	bra	ikbd_endit_stack
 
 	| Joystick packet, byte #2
 
 ikbd_joystick:
-#if defined(__mcoldfire__)
-	lea	sp@(-12),sp
-	moveml	d0-d1/a0,sp@
-#else
-	moveml	d0-d1/a0,sp@-
-#endif
+	SAVESTACK_D0D1A0
 
 	| Check if source is IKBD or MIDI
-#if defined(__mcoldfire__)
-	moveql	#0,d0
-	btst	d0,0xfffffc00.w
-#else
-	btst	#0,0xfffffc00.w
-#endif
-	beqs	ikbd_oldmidi
+	BTST_REG(d0,#0,0xfffffc00.w)
+	beq	ikbd_oldmidi
 
-#if defined(__mcoldfire__)
-	moveb	0xfffffc02:w,d0
-	moveb	d0,_Ikbd_joystick+1
+	MOVEB_REG(d0,0xfffffc02:w,_Ikbd_joystick+1)
 
-	movel	#ikbd,d0
-	movel	d0,0x118:w
-
+	MOVEL_REG(d0,#ikbd,0x118:w)
 	bra	ikbd_endit_stack
-#else
-	moveb	0xfffffc02:w,_Ikbd_joystick+1
-
-	movel	#ikbd,0x118:w
-
-	bras	ikbd_endit_stack
-#endif
 
 	.bss
 	
