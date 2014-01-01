@@ -33,14 +33,6 @@
 
 #if defined(__mcoldfire__)
 
-# define SAVESTACK_D0D1A0A1	\
-	lea	sp@(-16),sp;	\
-	moveml	d0-d1/a0-a1,sp@
-
-# define RESTORESTACK_D0D1A0A1	\
-	moveml	sp@,d0-d1/a0-a1;	\
-	lea	sp@(16),sp
-
 # define SAVESTACK_D0D1A0	\
 	lea	sp@(-12),sp;	\
 	moveml	d0-d1/a0,sp@
@@ -72,12 +64,6 @@
 	
 #else
 
-# define SAVESTACK_D0D1A0A1	\
-	moveml	d0-d1/a0-a1,sp@-
-
-# define RESTORESTACK_D0D1A0A1	\
-	moveml	sp@+,d0-d1/a0-a1
-
 # define SAVESTACK_D0D1A0	\
 	moveml	d0-d1/a0,sp@-
 
@@ -104,7 +90,7 @@
 /*--- Install our IKBD vector ---*/
 
 _IkbdInstall:
-	SAVESTACK_D0D1A0A1
+	SAVESTACK_D0D1A0
 
 	| Disable all interrupts
 
@@ -140,7 +126,7 @@ _IkbdInstall:
 
 	movew	#0x2300,sr
 
-	RESTORESTACK_D0D1A0A1
+	RESTORESTACK_D0D1A0
 	rts
 
 /*--- Uninstall our IKBD vector ---*/
