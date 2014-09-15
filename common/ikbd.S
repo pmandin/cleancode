@@ -231,15 +231,16 @@ ikbd_yes_joystick:
 ikbd_no_mouse:
 	moveb	d0,d1
 	lea	_Ikbd_keyboard,a0
+
 #if defined(__mcoldfire__)
 	andl	#0x7f,d1
 	btst	#7,d0
-	spl	d0
+	seq	d0
 	moveb	d0,a0@(0,d1:l)
 #else
 	andw	#0x7f,d1
-	tas	d0
-	spl	a0@(0,d1:w)
+	btst	#7,d0
+	seq	a0@(0,d1:w)
 #endif
 
 	| End of interrupt
