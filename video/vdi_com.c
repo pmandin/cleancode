@@ -24,6 +24,7 @@
 #include <gem.h>
 #include <mint/osbind.h>
 #include <mint/cookie.h>
+#include <mint/sysvars.h>
 
 #include "rgb.h"
 #include "eddi_s.h"
@@ -47,16 +48,57 @@ short vdi_palette[256][3];
 /*--- Functions prototypes ---*/
 
 static void VDI_ReadEddiInfos(framebuffer_t *framebuffer);
+static unsigned short VDI_ReadTosVersion(void);
+static int VDI_HasCustomVdi(void);
 
 /*--- Functions ---*/
 
+static unsigned short VDI_ReadTosVersion(void)
+{
+	void *oldstack;
+	OSHEADER *os_hdr;
+	unsigned short r = 0x0100;
+
+	oldstack = (void *) Super(NULL);
+
+	os_hdr = (OSHEADER *) *_sysbase;
+	r = os_hdr->os_version;
+
+	Super(oldstack);
+
+	return(r);
+}
+
+static int VDI_HasCustomVdi(void)
+{
+	unsigned long dummy;
+
+	return(
+		(Getcookie(C_cVDI, &dummy) == C_FOUND)
+		|| (Getcookie(C_fVDI, &dummy) == C_FOUND)
+		|| (Getcookie(C_NVDI, &dummy) == C_FOUND)
+		|| (Getcookie(C_oVDI, &dummy) == C_FOUND)
+		|| (Getcookie(C__VDI, &dummy) == C_FOUND)
+	);
+}
+
 int VDI_OpenWorkstation(int apid)
 {
-	int i;
+	int i, tos_version;
 	short dummy;
 
 	/* Init VDI workstation */
-	vdi_workin[0]=Getrez()+2;
+
+	/* NOTE: Getrez()+2 is problematic for vdi_workin[0] */
+	/* https://github.com/freemint/tos.hyp/issues/89 */
+	/* https://web.archive.org/web/20190531112355/http://www.fultonsoft.com/revisiting-gem-for-the-atari-st-part-1/ */
+
+	tos_version = VDI_ReadTosVersion();
+
+	vdi_workin[0] = Getrez()+2;
+	if ((tos_version>0x300) || VDI_HasCustomVdi()) {
+		vdi_workin[0] = 1;
+	}
 	for(i = 1; i < 10; i++)
 		vdi_workin[i] = 1;
 	vdi_workin[10] = 2;
