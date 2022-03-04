@@ -197,7 +197,7 @@ void VDI_ReadInfos(framebuffer_t *framebuffer)
 	} else {
 		fprintf(output_handle, "without palette\n");
 	}
-	
+
 	/* Init hardware -> VDI palette mapping */
 	for(i = 16; i < 255; i++) {
 		vdi_index[i] = i;
@@ -238,10 +238,10 @@ void VDI_ReadInfos(framebuffer_t *framebuffer)
 	fprintf(output_handle, " Height=%d,", framebuffer->height);
 	fprintf(output_handle, " Depth=%d\n", framebuffer->bpp);
 	if (framebuffer->bpp>8) {
-		fprintf(output_handle, " A=0x%08x,", framebuffer->amask); 
-		fprintf(output_handle, " R=0x%08x,", framebuffer->rmask); 
-		fprintf(output_handle, " G=0x%08x,", framebuffer->gmask); 
-		fprintf(output_handle, " B=0x%08x\n", framebuffer->bmask); 
+		fprintf(output_handle, " A=0x%08x,", framebuffer->amask);
+		fprintf(output_handle, " R=0x%08x,", framebuffer->rmask);
+		fprintf(output_handle, " G=0x%08x,", framebuffer->gmask);
+		fprintf(output_handle, " B=0x%08x\n", framebuffer->bmask);
 	}
 }
 
@@ -345,7 +345,7 @@ static void VDI_ReadEddiInfos(framebuffer_t *framebuffer)
 							fprintf(output_handle, "BBBBBBBB GGGGGGGG RRRRRRRR\n");
 							FBMASK(0, 255, 255<<8, 255<<16);
 							FBSHIFT(0, 0, 8, 16);
-						}					
+						}
 						break;
 					case 32:
 						fprintf(output_handle, " A8R8G8B8: ");
@@ -369,7 +369,7 @@ static void VDI_ReadEddiInfos(framebuffer_t *framebuffer)
 							}
 						}
 						break;
-				}					
+				}
 				break;
 			default:
 				fprintf(output_handle, " Paletted mode\n");
@@ -383,10 +383,10 @@ static void VDI_ReadEddiInfos(framebuffer_t *framebuffer)
 				fprintf(output_handle, " Little endian,");
 			}
 
-			fprintf(output_handle, " A=0x%08x,", framebuffer->amask); 
-			fprintf(output_handle, " R=0x%08x,", framebuffer->rmask); 
-			fprintf(output_handle, " G=0x%08x,", framebuffer->gmask); 
-			fprintf(output_handle, " B=0x%08x\n", framebuffer->bmask); 
+			fprintf(output_handle, " A=0x%08x,", framebuffer->amask);
+			fprintf(output_handle, " R=0x%08x,", framebuffer->rmask);
+			fprintf(output_handle, " G=0x%08x,", framebuffer->gmask);
+			fprintf(output_handle, " B=0x%08x\n", framebuffer->bmask);
 		}
 	}
 
@@ -403,7 +403,7 @@ static void VDI_ReadEddiInfos(framebuffer_t *framebuffer)
 					vdi_index[*tmp_p++] = i;
 				}
 
-				fprintf(output_handle, " Paletted mode\n"); 
+				fprintf(output_handle, " Paletted mode\n");
 			}
 			break;
 		case CLUT_SOFTWARE:
@@ -444,7 +444,7 @@ static void VDI_ReadEddiInfos(framebuffer_t *framebuffer)
 								break;
 						}
 					}
-				}					
+				}
 
 				switch(num_colours) {
 					case 32768UL:
@@ -547,20 +547,20 @@ static void VDI_ReadEddiInfos(framebuffer_t *framebuffer)
 				} else {
 					fprintf(output_handle, " Little endian,");
 				}
-				fprintf(output_handle, " A=0x%08x,", framebuffer->amask); 
-				fprintf(output_handle, " R=0x%08x,", framebuffer->rmask); 
-				fprintf(output_handle, " G=0x%08x,", framebuffer->gmask); 
-				fprintf(output_handle, " B=0x%08x\n", framebuffer->bmask); 
+				fprintf(output_handle, " A=0x%08x,", framebuffer->amask);
+				fprintf(output_handle, " R=0x%08x,", framebuffer->rmask);
+				fprintf(output_handle, " G=0x%08x,", framebuffer->gmask);
+				fprintf(output_handle, " B=0x%08x\n", framebuffer->bmask);
 
 				new_amask = (0xff>>framebuffer->aloss)<<framebuffer->ashift;
 				new_rmask = (0xff>>framebuffer->rloss)<<framebuffer->rshift;
 				new_gmask = (0xff>>framebuffer->gloss)<<framebuffer->gshift;
 				new_bmask = (0xff>>framebuffer->bloss)<<framebuffer->bshift;
 
-				fprintf(output_handle, " Deduced: A=0x%08x,", new_amask); 
-				fprintf(output_handle, " R=0x%08x,", new_rmask); 
-				fprintf(output_handle, " G=0x%08x,", new_gmask); 
-				fprintf(output_handle, " B=0x%08x\n", new_bmask); 
+				fprintf(output_handle, " Deduced: A=0x%08x,", new_amask);
+				fprintf(output_handle, " R=0x%08x,", new_rmask);
+				fprintf(output_handle, " G=0x%08x,", new_gmask);
+				fprintf(output_handle, " B=0x%08x\n", new_bmask);
 			}
 			break;
 	}
@@ -601,7 +601,7 @@ unsigned long VDI_AllocateIndirectBuffer(framebuffer_t *framebuffer)
 	if (framebuffer->buffer!=NULL) {
 		memset(framebuffer->buffer, 0, screensize);
 	} else {
-		fprintf(stderr, "Could not allocate %d bytes for indirect rendering\n",screensize);		
+		fprintf(stderr, "Could not allocate %d bytes for indirect rendering\n",screensize);
 		screensize = 0;
 	}
 
