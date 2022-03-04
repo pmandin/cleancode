@@ -92,6 +92,7 @@ int VDI_OpenWorkstation(int apid)
 	/* NOTE: Getrez()+2 is problematic for vdi_workin[0] */
 	/* https://github.com/freemint/tos.hyp/issues/89 */
 	/* https://web.archive.org/web/20190531112355/http://www.fultonsoft.com/revisiting-gem-for-the-atari-st-part-1/ */
+	/* https://docs.dev-docs.org/ see NVDI programmer guide */
 
 	tos_version = VDI_ReadTosVersion();
 
