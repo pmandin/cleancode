@@ -13,7 +13,7 @@ vixb_ttp_LDADD = $(top_builddir)/common/libparam.a \
 	$(top_builddir)/common/libmxalloc.a \
 	libsblast2.a libsblast3.a libmvdi.a libvinside.a libvidelity.a libnova.a
 
-INCLUDES = -I$(top_srcdir)/common
+AM_CPPFLAGS = -I$(top_srcdir)/common
 
 lib_LIBRARIES = libsblast2.a libsblast3.a libmvdi.a libvinside.a libnova.a \
 	libvidelity.a

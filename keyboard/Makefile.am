@@ -13,5 +13,4 @@ kbikin_tos_LDADD = $(top_builddir)/common/libikbd.a
 
 kbikpo_tos_SOURCES = ikbdpoll.c
 
-INCLUDES = -I$(top_srcdir)/common
-
+AM_CPPFLAGS = -I$(top_srcdir)/common

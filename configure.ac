@@ -4,10 +4,10 @@
 AC_PREREQ(2.59)
 AC_INIT(cleancode, 0.33, patmandin@gmail.com)
 AC_CONFIG_SRCDIR([video/xbios.c])
-AC_CONFIG_HEADER([config.h])
+AC_CONFIG_HEADERS([config.h])
 AC_CONFIG_AUX_DIR([autotools])
-AC_CANONICAL_SYSTEM
-AM_INIT_AUTOMAKE($PACKAGE_NAME, $PACKAGE_VERSION)
+AC_CANONICAL_HOST
+AM_INIT_AUTOMAKE
 m4_ifdef([AM_SILENT_RULES],[AM_SILENT_RULES([yes])])
 
 # Checks for programs.
@@ -24,7 +24,6 @@ AC_PROG_RANLIB
 AC_OBJEXT
 
 # Checks for header files.
-AC_HEADER_STDC
 AC_CHECK_HEADERS([fcntl.h stdlib.h string.h unistd.h])
 
 # Checks for typedefs, structures, and compiler characteristics.

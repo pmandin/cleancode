@@ -7,6 +7,6 @@ jsikin_tos_LDADD = $(top_builddir)/common/libikbd.a
 
 jpha_tos_SOURCES = joypad.c
 
-INCLUDES = -I$(top_srcdir)/common
+AM_CPPFLAGS = -I$(top_srcdir)/common
 
 EXTRA_DIST = xbios_it.h

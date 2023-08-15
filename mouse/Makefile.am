@@ -13,6 +13,6 @@ moxb_tos_SOURCES = xbios_it.S xbios.c
 moikin_tos_SOURCES = ikbdintr.c
 moikin_tos_LDADD = $(top_builddir)/common/libikbd.a
 
-INCLUDES = -I$(top_srcdir)/common
+AM_CPPFLAGS = -I$(top_srcdir)/common
 
 EXTRA_DIST = xbios_it.h vdi_it.h

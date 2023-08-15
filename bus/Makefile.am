@@ -13,7 +13,7 @@ busc_ttp_SOURCES = bus_scsi.c
 busc_ttp_LDADD = $(top_builddir)/common/libparam.a \
 	libscsi.a
 
-INCLUDES = -I$(top_srcdir)/common
+AM_CPPFLAGS = -I$(top_srcdir)/common
 
 libpciincludedir = $(includedir)
 libpciinclude_HEADERS = pci.h pcinames.h

@@ -7,7 +7,7 @@ hw_ttp_LDADD = $(top_builddir)/common/libparam.a \
 hwrs_ttp_SOURCES = rsvfdemo.c
 hwrs_ttp_LDADD = $(top_builddir)/common/libparam.a
 
-INCLUDES = -I$(top_srcdir)/common
+AM_CPPFLAGS = -I$(top_srcdir)/common
 
 noinst_LIBRARIES = libhw.a
 

@@ -8,7 +8,7 @@ dixh_ttp_SOURCES = xhdidemo.c
 dixh_ttp_LDADD = $(top_builddir)/common/libparam.a \
 	libxhdi.a
 
-INCLUDES = -I$(top_srcdir)/common
+AM_CPPFLAGS = -I$(top_srcdir)/common
 
 libxhdiincludedir = $(includedir)
 libxhdiinclude_HEADERS = xhdi.h
