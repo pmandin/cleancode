@@ -22,6 +22,7 @@
 #include <string.h>
 
 #include <gem.h>
+#include <gemx.h>
 #include <mint/osbind.h>
 #include <mint/cookie.h>
 #include <mint/sysvars.h>
