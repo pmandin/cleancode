@@ -18,19 +18,42 @@
 	Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307  USA
 */
 
+#include <string.h>
+
 #include <mint/osbind.h>
+#include <mint/sysvars.h>
 
 /*--- Variables ---*/
 
 static int atari_mxalloc_avail=-1;
 
+/*--- Functions prototypes ---*/
+
+static unsigned short ReadTosVersion(void);
+
 /*--- Functions ---*/
+
+static unsigned short ReadTosVersion(void)
+{
+	void *oldstack;
+	OSHEADER *os_hdr;
+	unsigned short r = 0x0100;
+
+	oldstack = (void *) Super(NULL);
+
+	os_hdr = (OSHEADER *) *_sysbase;
+	r = os_hdr->os_version;
+
+	Super(oldstack);
+
+	return(r);
+}
 
 void *Atari_SysMalloc(unsigned long size, unsigned short alloc_type)
 {
 	/* Test if Mxalloc() available */
 	if (atari_mxalloc_avail<0) {
-		atari_mxalloc_avail = (Sversion()>=0x1900);
+		atari_mxalloc_avail = ((Sversion()>=0x1900) && (ReadTosVersion()>=0x300));
 	}
 
 	if (atari_mxalloc_avail) {
